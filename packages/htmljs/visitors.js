@@ -35,37 +35,49 @@ HTML.Visitor.extend = function (options) {
 
 HTML.Visitor.def({
   visit: function (content/*, ...*/) {
+
+    console.log("========================================");
+    console.log("Visiting", content);
     if (content == null)
       // null or undefined.
       return this.visitNull.apply(this, arguments);
 
     if (typeof content === 'object') {
+      console.log("it's an object... good...")
       if (content.htmljsType) {
         switch (content.htmljsType) {
         case HTML.Tag.htmljsType:
+          console.log("It's a %s Tag", content.tagName);
           return this.visitTag.apply(this, arguments);
         case HTML.CharRef.htmljsType:
+          console.log("It's a CharRef");
           return this.visitCharRef.apply(this, arguments);
         case HTML.Comment.htmljsType:
+          console.log("It's a Comment");
           return this.visitComment.apply(this, arguments);
         case HTML.Raw.htmljsType:
+          console.log("It's a raw");
           return this.visitRaw.apply(this, arguments);
         default:
           throw new Error("Unknown htmljs type: " + content.htmljsType);
         }
       }
 
-      if (HTML.isArray(content))
+      if (HTML.isArray(content)) {
+        console.log(" mutha fucking array????");
         return this.visitArray.apply(this, arguments);
+      }
 
       return this.visitObject.apply(this, arguments);
 
     } else if ((typeof content === 'string') ||
                (typeof content === 'boolean') ||
                (typeof content === 'number')) {
+      console.log("it's some fucked up non-object???", typeof content);
       return this.visitPrimitive.apply(this, arguments);
 
     } else if (typeof content === 'function') {
+      console.log("it's a god damned function");
       return this.visitFunction.apply(this, arguments);
     }
 

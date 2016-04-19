@@ -109,19 +109,19 @@ TreeTransformer.def({
 var OptimizingVisitor = TreeTransformer.extend();
 OptimizingVisitor.def({
   visitNull: toRaw,
-  visitPrimitive: toRaw,
+    visitPrimitive: toRaw,
   visitComment: toRaw,
   visitCharRef: toRaw,
-  visitArray: function (array) {
-    var optimizability = getOptimizability(array);
-    if (optimizability === OPTIMIZABLE.FULL) {
-      return toRaw(array);
-    } else if (optimizability === OPTIMIZABLE.PARTS) {
-      return TreeTransformer.prototype.visitArray.call(this, array);
-    } else {
-      return array;
-    }
-  },
+    visitArray: function (array) {
+      var optimizability = getOptimizability(array);
+      if (optimizability === OPTIMIZABLE.FULL) {
+        return toRaw(array);
+      } else if (optimizability === OPTIMIZABLE.PARTS) {
+        return TreeTransformer.prototype.visitArray.call(this, array);
+      } else {
+        return array;
+      }
+    },
   visitTag: function (tag) {
     var optimizability = getOptimizability(tag);
     if (optimizability === OPTIMIZABLE.FULL) {

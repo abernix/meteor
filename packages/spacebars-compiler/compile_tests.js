@@ -47,6 +47,47 @@ coffee = {
   runCompilerOutputTests: null // implemented in compiler_output_tests.coffee
 };
 
+Tinytest.add("spacebars-compiler - optimizer", function (test) {
+
+  var matches = function (input, expected) {
+    var tree = SpacebarsCompiler.parse(input);
+    var compiled = SpacebarsCompiler.codeGen(tree /* , {
+      // isTemplate: true ??? maybe???
+    }*/);
+    test.equal(compiled, expected);
+  };
+
+  matches("<!--b4comment--> <!-- <p> --> <tr> <td>tdguts0</td> </tr>",
+    BlazeTools.toJS([
+      HTML.Comment("b4comment"), " ",
+      HTML.Comment(" <p> "), " ",
+      HTML.TR(" ", HTML.TD("tdguts0"), " ")
+    ])
+  );
+
+  // var getError = function (input) {
+  //   try {
+  //     SpacebarsCompiler.compile(input);
+  //   } catch (e) {
+  //     return e.message;
+  //   }
+  //   test.fail("Didn't throw an error: " + input);
+  //   return '';
+  // };
+
+  // var assertStartsWith = function (a, b) {
+  //   test.equal(a.substring(0, b.length), b);
+  // };
+
+  // var isError = function (input, errorStart) {
+  //   assertStartsWith(getError(input), errorStart);
+  // };
+
+  // isError("<input></input>",
+
+  test.equal(1, 1);
+});
+
 
 Tinytest.add("spacebars-compiler - compiler errors", function (test) {
 
