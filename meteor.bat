@@ -35,6 +35,15 @@ IF EXIST "%~dp0\.git" (
   SET METEOR_INSTALLATION=%~dp0
 )
 
+rem Detect Command Prompt Improvements which require different terminal settings
+PowerShell.exe ^
+  -executionpolicy ByPass ^
+  -file "%~dp0\scripts\windows\check-modern-shell.ps1" < con
+
+IF errorlevel 1 (
+  SET METEOR_WINDOWS_LEGACY_SHELL=true
+)
+
 SET NODE_PATH=%~dp0\dev_bundle\lib\node_modules
 SET BABEL_CACHE_DIR=%~dp0\.babel-cache
 

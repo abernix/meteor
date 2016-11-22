@@ -67,8 +67,12 @@ var wordwrap = require('wordwrap');
 
 var PROGRESS_DEBUG = !!process.env.METEOR_PROGRESS_DEBUG;
 var FORCE_PRETTY=undefined;
-var CARRIAGE_RETURN =
-  (process.platform === 'win32' && process.stdout.isTTY ? new Array(249).join('\b') : '\r');
+var CARRIAGE_RETURN = (
+      process.platform === 'win32' &&
+      process.stdout.isTTY &&
+      process.env.METEOR_WINDOWS_LEGACY_SHELL &&
+      new Array(249).join('\b')
+  ) || '\r';
 
 if (process.env.METEOR_PRETTY_OUTPUT) {
   FORCE_PRETTY = process.env.METEOR_PRETTY_OUTPUT != '0';
