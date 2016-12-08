@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "source-map": {
+      "version": "0.5.6",
+      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.5.6.tgz",
+      "from": "source-map@0.5.6"
+    },
     "uglify-js": {
       "version": "2.7.5",
       "resolved": "git+https://github.com/mishoo/UglifyJS2.git#3ee46e91e802fb8bf20656bce115375c5f624052",

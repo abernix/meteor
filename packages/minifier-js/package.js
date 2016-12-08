@@ -4,7 +4,8 @@ Package.describe({
 });
 
 Npm.depends({
-  "uglify-js": "git+https://github.com/mishoo/UglifyJS2#harmony-v2.7.5"
+  "source-map": "0.5.6",
+  "uglify-js": "git+https://github.com/mishoo/UglifyJS2#harmony-v2.7.5",
 });
 
 Npm.strip({
