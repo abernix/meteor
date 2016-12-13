@@ -8,7 +8,7 @@ Package.describe({
 });
 
 Npm.depends({
-  mongodb: "2.2.15"
+  mongodb: "2.2.16"
 });
 
 Package.onUse(function (api) {
