@@ -113,6 +113,8 @@ fi
 DEV_BUNDLE="$SCRIPT_DIR/dev_bundle"
 METEOR="$SCRIPT_DIR/tools/index.js"
 
+echo "DEBUG: The current ulimit is $(ulimit -Sn)"
+
 # Set the nofile ulimit as high as permitted by the hard-limit/kernel
 if [ "$(ulimit -Sn)" != "unlimited" ]; then
     if [ "$(uname -s)" = "Darwin" ]; then
@@ -123,8 +125,15 @@ if [ "$(ulimit -Sn)" != "unlimited" ]; then
 
     if [ -n "${maxfilesuse}" ] && [ "${maxfilesuse}" != "unlimited" ]; then
         ulimit -Sn ${maxfilesuse} > /dev/null 2>&1
+        if [ "$?" = "0" ]; then
+            echo "DEBUG: Ulimit set to ${maxfilesuse}"
+        else
+            echo "DEBUG: Cannot change ulimit!" 1>&2
+        fi
     fi
 fi
+
+echo "DEBUG: The ulimit is now $(ulimit -Sn)"
 
 # We used to set $NODE_PATH here to include the node_modules from the dev
 # bundle, but now we just get them from the symlink at tools/node_modules. This
