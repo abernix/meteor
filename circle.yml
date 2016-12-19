@@ -13,12 +13,9 @@ dependencies:
     - ".meteor"
     - ".babel-cache"
   override:
-    # shouldn't take longer than 10 minutes
-    - METEOR_PRETTY_OUTPUT=0 ./meteor --get-ready:
-        timeout: 600
+    - ./meteor --version
 
 test:
   override:
-    - ./scripts/ci.sh :
+    - test "$(ulimit -S -n)" = '102400'
         parallel: true
-        timeout: 1200
