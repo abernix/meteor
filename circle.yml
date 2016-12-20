@@ -5,8 +5,11 @@ checkout:
 dependencies:
   pre:
     # https://github.com/meteor/docs/blob/version-NEXT/long-form/file-change-watcher-efficiency.md
+    - echo "* soft nofile 102400" | sudo tee -a /etc/security/limits.d/*_limits.conf
+    - echo "* hard nofile 102400" | sudo tee -a /etc/security/limits.d/*_limits.conf
     - echo fs.file-max=102400 | sudo tee -a /etc/sysctl.conf
     - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
+    - echo "session required pam_limits.so" | sudo tee -a /etc/pam.d/common-session
     - sudo sysctl -p
   cache_directories:
     - "dev_bundle"
