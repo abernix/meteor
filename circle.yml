@@ -11,7 +11,7 @@ dependencies:
     - ".meteor"
     - ".babel-cache"
   override:
-    - ./meteor --version
+    - ./meteor --version || true
 
 test:
   override:
