@@ -15,5 +15,5 @@ dependencies:
 
 test:
   override:
-    - test "$(ulimit -S -n)" = '102400'
+    - test "$(ulimit -S -n)" = '102400' :
         parallel: true
