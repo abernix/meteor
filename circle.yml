@@ -17,5 +17,5 @@ dependencies:
 
 test:
   override:
-    - test "$(ulimit -S -n)" = '102400' :
+    - (export ULIMIT_NOW="$(ulimit -S -n)" && echo "${ULIMIT_NOW}" && test "${ULIMIT_NOW}" = '102400') :
         parallel: true
