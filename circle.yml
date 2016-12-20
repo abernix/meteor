@@ -6,8 +6,6 @@ dependencies:
   pre:
     # https://github.com/meteor/docs/blob/version-NEXT/long-form/file-change-watcher-efficiency.md
     - echo fs.file-max=102400 | sudo tee -a /etc/sysctl.conf
-    - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf
-    - sudo sysctl -p
   cache_directories:
     - "dev_bundle"
     - ".meteor"
