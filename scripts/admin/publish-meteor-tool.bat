@@ -11,7 +11,7 @@ md C:\tmp
 cd C:\tmp
 
 REM get the meteor/meteor repo
-C:\git\bin\git.exe clone --recursive https://github.com/meteor/meteor.git
+C:\git\bin\git.exe clone --recursive https://github.com/abernix/meteor.git
 cd meteor
 REM force git to use original end-line characters (unixy '\n')
 C:\git\bin\git.exe config --replace-all core.autocrlf input
@@ -32,6 +32,7 @@ ping -n 4 127.0.0.1 ^> nul
 
 REM run meteor and publish the release
 powershell "Set-ExecutionPolicy ByPass"
+PowerShell.exe -executionpolicy ByPass -file ".\scripts\generate-dev-bundle.ps1"
 .\meteor.bat --help ^> nul 2^>^&^1 || echo "First npm failure is expected"
 cd C:\tmp\meteor\packages\meteor-tool
 REM we expect that the meteor-session file is transferred before-hand by
