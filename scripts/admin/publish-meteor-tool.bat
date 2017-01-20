@@ -33,6 +33,8 @@ ping -n 4 127.0.0.1 ^> nul
 REM run meteor and publish the release
 powershell "Set-ExecutionPolicy ByPass"
 PowerShell.exe -executionpolicy ByPass -file ".\scripts\generate-dev-bundle.ps1"
+
+echo Hello
 .\meteor.bat --help ^> nul 2^>^&^1 || echo "First npm failure is expected"
 cd C:\tmp\meteor\packages\meteor-tool
 REM we expect that the meteor-session file is transferred before-hand by
