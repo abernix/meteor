@@ -3,18 +3,22 @@
 // which appears to be partially inspired by the original
 // runner.js which used to be here.
 
-const webdriver = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
+const path = require("path");
+const webdriver = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
 const logging = webdriver.logging;
 
 // From packages/test-in-console/driver.js
-const MAGIC_PREFIX = '##_meteor_magic##';
+const MAGIC_PREFIX = "##_meteor_magic##";
 
 const logOptions = new logging.Preferences();
-logOptions.setLevel('browser', logging.Level.ALL);
+logOptions.setLevel("browser", logging.Level.ALL);
 
 const options = new chrome.Options();
 options.setLoggingPrefs(logOptions);
+
+const userDataDir = path.resolve("./browser-profile");
+options.addArguments(`user-data-dir=${userDataDir}`);
 
 const driver = new chrome.Driver(options);
 
