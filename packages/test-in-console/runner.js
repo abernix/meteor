@@ -4,7 +4,7 @@
 // runner.js which used to be here.
 
 const webdriver = require('selenium-webdriver');
-const chrome = require('selenium-webdriver/chrome');
+const firefox = require('selenium-webdriver/firefox');
 const logging = webdriver.logging;
 
 // From packages/test-in-console/driver.js
@@ -13,10 +13,10 @@ const MAGIC_PREFIX = '##_meteor_magic##';
 const logOptions = new logging.Preferences();
 logOptions.setLevel('browser', logging.Level.ALL);
 
-const options = new chrome.Options();
-options.setLoggingPrefs(logOptions);
+const options = new firefox.Options();
+options.setLoggingPreferences(logOptions);
 
-const driver = new chrome.Driver(options);
+const driver = new firefox.Driver(options);
 
 const KNOWN_FACILITIES = [
   "xunit",
