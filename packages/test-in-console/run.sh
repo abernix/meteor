@@ -23,6 +23,7 @@ exec 3< <(meteor test-packages --driver-package test-in-console -p 4096 --exclud
 EXEC_PID=$!
 
 sed '/test-in-console listening$/q' <&3
+export NODE_PATH=${METEOR_HOME}/dev_bundle/lib/node_modules
 ./meteor node "$METEOR_HOME/packages/test-in-console/runner.js"
 STATUS=$?
 
