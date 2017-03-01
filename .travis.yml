@@ -3,6 +3,11 @@ node_js:
   - "4.0"
 addons:
   firefox: "51.0.1"
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
 before_install:
   - wget https://github.com/mozilla/geckodriver/releases/download/v0.14.0/geckodriver-v0.14.0-linux64.tar.gz
   - mkdir geckodriver
@@ -16,9 +21,3 @@ script: TEST_PACKAGES_EXCLUDE="less" ./packages/test-in-console/run.sh
 sudo: false
 env:
   - CXX=g++-4.8
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
