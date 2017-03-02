@@ -19,7 +19,7 @@ before_install:
   - ls -la chromium/chrome-linux/
   - export PATH=$PATH:$PWD/chromium/chrome-linux
   - export CHROME_BINARY_PATH=$PWD/chromium/chrome-linux/chrome
-  - wget https://chromedriver.storage.googleapis.com/2.26/chromedriver_linux64.zip
+  - wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
   - mkdir chromedriver
   - unzip chromedriver_linux64.zip -d chromedriver
   - export PATH=$PATH:$PWD/chromedriver
