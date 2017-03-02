@@ -3,6 +3,7 @@
 // which appears to be partially inspired by the original
 // runner.js which used to be here.
 
+const fs = require("fs");
 const path = require("path");
 const webdriver = require("selenium-webdriver");
 const chrome = require("selenium-webdriver/chrome");
@@ -24,9 +25,9 @@ options.addArguments("--no-sandbox");
 options.addArguments("--disable-build-check");
 
 if (process.env.CHROME_BINARY_PATH) {
-  const binaryPath = process.resolve(process.env.CHROME_BINARY_PATH);
+  const binaryPath = path.resolve(process.env.CHROME_BINARY_PATH);
   console.log("Checking for binary at", binaryPath);
-  if (path.lstatSync(binaryPath)) {
+  if (fs.lstatSync(binaryPath)) {
     console.log("  Using Chrome Binary at that path.");
     options.setChromeBinaryPath(binaryPath);
   } else {
