@@ -95,6 +95,7 @@ function processLogEntry(entry) {
 }
 
 function processLogEntries(entries, thing) {
+  console.log("Processing log entries", entries.length);
   return entries.forEach(processLogEntry);
 }
 
@@ -124,6 +125,7 @@ const endIfDone = (done, timer) => {
 
 const checkDone = () => {
   return driver.executeScript(function() {
+    console.log("Checking if we're done");
     if (typeof TEST_STATUS !== "undefined") {
       return TEST_STATUS.DONE;
     }
@@ -135,6 +137,7 @@ const targetUrl = process.env.URL || "http://localhost:3000";
 
 driver.get(targetUrl).then(() => {
   const pollTimer = setInterval(() => {
+    console.log("Checking logs");
     handleLogs()
       .then(checkDone)
       .then((done) => endIfDone(pollTimer))
