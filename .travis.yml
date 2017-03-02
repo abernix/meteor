@@ -13,8 +13,10 @@ before_script:
   - sleep 3 # give xvfb some time to start
 before_install:
   - git clone https://github.com/scheib/chromium-latest-linux.git chrome
-  - (cd chrome/ && sh update.sh && chmod +x ./run.sh && cp run.sh chromium-browser)
-  - export PATH=$PATH:$PWD/chrome
+  - (cd chrome/ && sh update.sh)
+  - ls -la chrome/
+  - ls -la chrome/latest/
+  - export PATH=$PATH:$PWD/chrome/latest
   - wget https://chromedriver.storage.googleapis.com/2.27/chromedriver_linux64.zip
   - mkdir chromedriver
   - unzip chromedriver_linux64.zip -d chromedriver
