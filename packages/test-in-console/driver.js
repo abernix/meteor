@@ -112,6 +112,8 @@ runTests = function () {
   setTimeout(sendReports, 500);
   setInterval(sendReports, 2000);
 
+  console.log("Running some tests");
+
   Tinytest._runTestsEverywhere(
     function (results) {
       var name = getName(results);
