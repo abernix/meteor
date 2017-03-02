@@ -20,7 +20,9 @@ exec 3< <(meteor test-packages --driver-package test-in-console -p 4096 --exclud
 EXEC_PID=$!
 
 sed '/test-in-console listening$/q' <&3
-curl $URL
+node --version
+echo $NODE_PATH
+node --version
 node "$METEOR_HOME/packages/test-in-console/runner.js"
 STATUS=$?
 
