@@ -21,8 +21,8 @@ options.setLoggingPrefs(logOptions);
 const userDataDir = path.resolve("./browser-profile");
 console.log("Using user data directory", userDataDir);
 options.addArguments(`user-data-dir=${userDataDir}`);
-options.addArguments("--no-sandbox");
-options.addArguments("--disable-build-check");
+options.addArguments("no-sandbox");
+options.addArguments("enable-logging");
 
 if (process.env.CHROME_BINARY_PATH) {
   const binaryPath = path.resolve(process.env.CHROME_BINARY_PATH);
