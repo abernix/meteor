@@ -36,6 +36,7 @@ var getName = function (result) {
 // ConsoleMessage.parameters
 // https://bugs.chromium.org/p/chromedriver/issues/detail?id=669
 var log = function (/*arguments*/) {
+  console.log("What the");
   if (typeof console !== 'undefined') {
     console.log.call(console, Array.from(arguments).join(" "));
   }
