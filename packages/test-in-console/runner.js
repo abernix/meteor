@@ -12,7 +12,7 @@ const logging = webdriver.logging;
 // From packages/test-in-console/driver.js
 const MAGIC_PREFIX = "##_meteor_magic##";
 
-logging.installConsoleHandler();
+logging.installConsoleHandler(logging.Type.BROWSER);
 logging.getLogger('webdriver.http').setLevel(logging.Level.ALL);
 logging.getLogger(logging.Type.BROWSER).setLevel(logging.Level.ALL);
 
