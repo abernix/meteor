@@ -74,6 +74,7 @@ const nonMatchingMessage = (entry, message) =>
   console.log(message || ("    [" + entry.level.name + "] " + entry.message));
 
 function processLogEntry(entry) {
+  console.log("Log Entry", entry.message);
   const logRegexp = /^([^\s]+) ([^\s]+) (")?(.*)\3$/;
   const messageParts = logRegexp.exec(entry.message);
   if (!messageParts) {
