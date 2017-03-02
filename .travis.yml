@@ -13,7 +13,9 @@ before_script:
   - sleep 3 # give xvfb some time to start
 before_install:
   - git clone https://github.com/scheib/chromium-latest-linux.git chrome
-  - (cd chrome/ && sh update.sh)
+  - cd chrome/ && sh update.sh
+  - pwd
+  - ls -la
   - ls -la chrome/
   - ls -la chrome/latest/
   - export PATH=$PATH:$PWD/chrome/latest
