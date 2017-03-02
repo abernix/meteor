@@ -8,7 +8,7 @@ export METEOR_HOME=`pwd`
 ./meteor npm cache clear
 
 # Just in case these packages haven't been installed elsewhere.
-npm install -g selenium-webdriver
+npm install -g selenium-webdriver@3.1.0
 
 export PATH=$METEOR_HOME:$PATH
 # synchronously get the dev bundle and NPM modules if they're not there.
