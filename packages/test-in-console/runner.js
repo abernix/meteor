@@ -13,19 +13,23 @@ const logging = webdriver.logging;
 const MAGIC_PREFIX = "##_meteor_magic##";
 
 logging.installConsoleHandler();
-logging.getLogger('browser').setLevel(logging.Level.ALL);
+logging.getLogger('webdriver.http').setLevel(logging.Level.ALL);
+logging.getLogger(logging.Type.BROWSER).setLevel(logging.Level.ALL);
+
 
 const logOptions = new logging.Preferences();
-logOptions.setLevel("browser", logging.Level.ALL);
+logOptions.setLevel(logging.Type.BROWSER, logging.Level.ALL);
 
-const options = new chrome.Options();
-options.setLoggingPrefs(logOptions);
+const caps = webdriver.Capabilities.chrome();
+caps.setLoggingPrefs(logOptions);
 
+const options = chrome.Options.fromCapabilities(caps);
 const userDataDir = path.resolve("./browser-profile");
 console.log("Using user data directory", userDataDir);
-options.addArguments(`user-data-dir=${userDataDir}`);
-options.addArguments("no-sandbox");
-options.addArguments("enable-logging");
+options.addArguments(`--user-data-dir=${userDataDir}`);
+options.addArguments("--no-sandbox");
+options.addArguments("--enable-logging");
+options.addArguments("--verbose");
 
 if (process.env.CHROME_BINARY_PATH) {
   const binaryPath = path.resolve(process.env.CHROME_BINARY_PATH);
@@ -102,7 +106,7 @@ function processLogEntries(entries, thing) {
   return entries.forEach(processLogEntry);
 }
 
-const getLogs = () => driver.manage().logs().get("browser");
+const getLogs = () => driver.manage().logs().get(logging.Type.BROWSER);
 const handleLogs = () => getLogs().then(processLogEntries);
 
 const endIfDone = (done, timer) => {
