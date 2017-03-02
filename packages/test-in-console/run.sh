@@ -9,8 +9,6 @@ export METEOR_HOME=`pwd`
 
 # Just in case these packages haven't been installed elsewhere.
 ./meteor npm install -g \
-  phantomjs-prebuilt \
-  browserstack-webdriver \
   selenium-webdriver@3.0.0-beta-2
 
 export PATH=$METEOR_HOME:$PATH
