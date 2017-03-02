@@ -12,7 +12,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 before_install:
-  - export CHROMIUM_REVISION=433062
+  - export CHROMIUM_REVISION=423800
   - mkdir chromium
   - wget -O chromium.zip https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F$CHROMIUM_REVISION%2Fchrome-linux.zip?alt=media
   - unzip chromium.zip -d chromium
