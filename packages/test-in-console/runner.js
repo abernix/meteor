@@ -23,7 +23,16 @@ options.addArguments(`user-data-dir=${userDataDir}`);
 options.addArguments("--no-sandbox");
 options.addArguments("--disable-build-check");
 
-//options.setChromeBinaryPath("/Applications/Chromium.app/Contents/MacOS/Chromium");
+if (process.env.CHROME_BINARY_PATH) {
+  const binaryPath = process.resolve(process.env.CHROME_BINARY_PATH);
+  console.log("Checking for binary at", binaryPath);
+  if (path.lstatSync(binaryPath)) {
+    console.log("  Using Chrome Binary at that path.");
+    options.setChromeBinaryPath(binaryPath);
+  } else {
+    console.log("  Couldn't find the binary path at %s", binaryPath);
+  }
+}
 
 const driver = new chrome.Driver(options);
 
