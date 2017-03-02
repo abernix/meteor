@@ -8,7 +8,7 @@ export METEOR_HOME=`pwd`
 ./meteor npm cache clear
 
 # Just in case these packages haven't been installed elsewhere.
-npm install -g selenium-webdriver@3.1.0
+./meteor npm install -g selenium-webdriver@3.1.0
 
 export PATH=$METEOR_HOME:$PATH
 # synchronously get the dev bundle and NPM modules if they're not there.
@@ -20,10 +20,8 @@ exec 3< <(meteor test-packages --driver-package test-in-console -p 4096 --exclud
 EXEC_PID=$!
 
 sed '/test-in-console listening$/q' <&3
-node --version
-echo $NODE_PATH
-node --version
-node "$METEOR_HOME/packages/test-in-console/runner.js"
+NODE_PATH="${METEOR_HOME}/dev_bundle/lib/node_modules" \
+  node "$METEOR_HOME/packages/test-in-console/runner.js"
 STATUS=$?
 
 pkill -TERM -P $EXEC_PID
