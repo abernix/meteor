@@ -18,7 +18,11 @@ const options = new chrome.Options();
 options.setLoggingPrefs(logOptions);
 
 const userDataDir = path.resolve("./browser-profile");
+console.log("Using user data directory", userDataDir);
 options.addArguments(`user-data-dir=${userDataDir}`);
+options.addArguments("--no-sandbox");
+
+//options.setChromeBinaryPath("/Applications/Chromium.app/Contents/MacOS/Chromium");
 
 const driver = new chrome.Driver(options);
 
