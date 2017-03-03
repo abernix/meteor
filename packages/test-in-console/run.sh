@@ -17,7 +17,7 @@ node --version
 
 tmp_npm_path=".tmp-test-npms/node_modules"
 mkdir -p ${tmp_npm_path}
-npm install -g selenium-webdriver@3.0.0-beta-2 --prefix ${tmp_npm_path}
+npm install selenium-webdriver@3.0.0-beta-2 --prefix ${tmp_npm_path}
 
 exec 3< <(meteor test-packages --driver-package test-in-console -p 4096 --exclude ${TEST_PACKAGES_EXCLUDE:-''})
 EXEC_PID=$!
