@@ -24,7 +24,7 @@ EXEC_PID=$!
 
 sed '/test-in-console listening$/q' <&3
 export NODE_PATH="${METEOR_HOME}/${tmp_npm_path}"
-script node "$METEOR_HOME/packages/test-in-console/runner.js"
+node "$METEOR_HOME/packages/test-in-console/runner.js" | tee
 STATUS=$?
 
 pkill -TERM -P $EXEC_PID
