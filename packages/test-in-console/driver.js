@@ -117,6 +117,7 @@ runTests = function () {
 
   Tinytest._runTestsEverywhere(
     function (results) {
+      console.log("Running something");
       var name = getName(results);
       if (!_.has(resultSet, name)) {
         var testPath = EJSON.clone(results.groupPath);
@@ -134,6 +135,7 @@ runTests = function () {
       // Loop through events, and record status for each test
       // Also log result if test has finished
       _.each(results.events, function (event) {
+        console.log("Do your thing!");
         resultSet[name].events.push(event);
         switch (event.type) {
         case "ok":
@@ -188,6 +190,7 @@ runTests = function () {
       if (failed > 0) {
         log("~~~~~~~ THERE ARE FAILURES ~~~~~~~");
       }
+      console.log("They are done", passed);
       log("passed/expected/failed/total", passed, "/", expected, "/", failed, "/", _.size(resultSet));
       sendReports(function () {
         if (doReport) {
