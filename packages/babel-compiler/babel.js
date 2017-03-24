@@ -29,11 +29,5 @@ Babel = {
 
   setCacheDir: function (cacheDir) {
     Npm.require('meteor-babel').setCacheDir(cacheDir);
-  },
-
-  minify: function(source, options) {
-    var meteorBabel = Npm.require('meteor-babel');
-    var options = options || meteorBabel.getMinifierOptions();
-    return meteorBabel.minify(source, options);
   }
 };
