@@ -682,12 +682,8 @@ Previous builder: ${previousBuilder.outputPath}, this builder: ${outputPath}`
       });
     }
 
-    // XXX Alternatively, we could just keep buildPath around, and make
-    // outputPath be a symlink pointing to it. This doesn't work for the NPM use
-    // case of renameDirAlmostAtomically since that one is constructing files to
-    // be checked in to version control, but here we could get away with it.
     if (this.buildPath !== this.outputPath) {
-      files.renameDirAlmostAtomically(this.buildPath, this.outputPath);
+      files.move(this.buildPath, this.outputPath, { overwrite: true });
     }
   }
 
