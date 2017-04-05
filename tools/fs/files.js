@@ -278,14 +278,26 @@ function statOrNull(path, preserveSymlinks) {
   }
 }
 
+
+// Fibers are disabled by default for files.* operations unless
+// process.env.METEOR_DISABLE_FS_FIBERS parses to a falsy value.
+const YIELD_ALLOWED = !! (
+  _.has(process.env, "METEOR_DISABLE_FS_FIBERS") &&
+  ! JSON.parse(process.env.METEOR_DISABLE_FS_FIBERS));
+
+function canYield() {
+  return YIELD_ALLOWED &&
+    Fiber.current &&
+    Fiber.yield &&
+    ! Fiber.yield.disallowed;
+}
+
 function callAndTolerateBusyFilesystem(syncFsFunc, asyncFsFunc, ...args) {
   try {
     syncFsFunc.apply(this, args);
   } catch (e) {
     if (e.code === "ENOTEMPTY" &&
-        Fiber.current &&
-        Fiber.yield &&
-        ! Fiber.yield.disallowed) {
+        canYield()) {
       new Promise((resolve, reject) => {
         asyncFsFunc.call(this, ...args, err => {
           err ? reject(err) : resolve();
@@ -1443,12 +1455,6 @@ files.readLinkToMeteorScript = function (linkLocation, platform) {
 //   A helpful file to import for this purpose is colon-converter.js, which also
 //   knows how to convert various configuration file formats.
 
-// Fibers are disabled by default for files.* operations unless
-// process.env.METEOR_DISABLE_FS_FIBERS parses to a falsy value.
-const YIELD_ALLOWED = !! (
-  _.has(process.env, "METEOR_DISABLE_FS_FIBERS") &&
-  ! JSON.parse(process.env.METEOR_DISABLE_FS_FIBERS));
-
 files.fsFixPath = {};
 /**
  * Wrap a function from node's fs module to use the right slashes for this OS
@@ -1482,11 +1488,6 @@ function wrapFsFunc(fsFuncName, pathArgIndices, options) {
         args[i] = files.convertToOSPath(args[i]);
       }
 
-      const canYield = YIELD_ALLOWED &&
-        Fiber.current &&
-        Fiber.yield &&
-        ! Fiber.yield.disallowed;
-
       const shouldBeSync = alwaysSync || sync;
       // There's some overhead in awaiting a Promise of an async call,
       // vs just doing the sync call, which for a call like "stat"
@@ -1498,7 +1499,9 @@ function wrapFsFunc(fsFuncName, pathArgIndices, options) {
                          fsFuncName === 'rename' ||
                          fsFuncName === 'symlink');
 
-      if (canYield && shouldBeSync && !isQuickie) {
+      if (canYield() &&
+          shouldBeSync &&
+          ! isQuickie) {
         const promise = new Promise((resolve, reject) => {
           args.push((err, value) => {
             if (options.noErr) {
