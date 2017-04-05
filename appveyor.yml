@@ -13,9 +13,9 @@ install:
   - ps: Install-Product node 4
   - set CI=true
   - git submodule sync
+  - ps: $PSVersionTable.PSVersion
   - ps: >-
-      $PSVersionTable.PSVersion
-      If(-not (git submodule update --init --recursive | out-null)) {
+      If(-not (git submodule update --init --recursive 2> $null)) {
         Remove-Item -ErrorAction Ignore -Recurse -Force .git\\config
         Remove-Item -ErrorAction Ignore -Recurse -Force .git\\modules
         git submodule deinit -f . | out-null
