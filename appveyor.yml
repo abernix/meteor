@@ -9,8 +9,8 @@ cache:
   - dev_bundle
   - .babel-cache
 platform:
-  - x86
   - x64
+  - x86
 install:
   - ps: Install-Product node 4
   - set CI=true
