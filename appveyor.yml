@@ -29,9 +29,10 @@ test_script:
   - ls packages\\
   - ls packages\\non-core\\
   - ls packages\\non-core\\blaze\\
-  - ps: |
+  - ps: >-
       .\\meteor.bat npm install --global `
         phantomjs-prebuilt `
-        browserstack-webdriver
+        browserstack-webdriver `
+
   - .\\meteor.bat self-test --list
   # - ./meteor --get-ready
