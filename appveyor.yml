@@ -13,12 +13,11 @@ install:
   - ps: Install-Product node 4
   - set CI=true
   - git submodule sync
-  - ps: $PSVersionTable.PSVersion
   - ps: >-
       If(-not (git submodule update --init --recursive 2> $null)) {
         Remove-Item -ErrorAction Ignore -Recurse -Force .git\\config
         Remove-Item -ErrorAction Ignore -Recurse -Force .git\\modules
-        git submodule deinit -f . | out-null
+        git submodule deinit -f . 2> $null
         git submodule update --init --recursive
       }
 build: off
@@ -30,9 +29,10 @@ test_script:
   - ls packages\\
   - ls packages\\non-core\\
   - ls packages\\non-core\\blaze\\
-  - >-
-    .\\meteor.bat npm install --global
-      phantomjs-prebuilt
-      browserstack-webdriver
+  - >
+    .\\meteor.bat npm install --global `
+      phantomjs-prebuilt `
+      browserstack-webdriver `
+
   - .\\meteor.bat self-test --list
   # - ./meteor --get-ready
