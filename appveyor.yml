@@ -8,6 +8,9 @@ platform:
 install:
   - ps: Install-Product node 4
   - set CI=true
+  - git submodule sync
+  - ps: "&{If(-not (git submodule update --init --recursive)) {(Remove-Item -ErrorAction Ignore -Recurse
+-Force .git\\modules) ; git submodule deinit -f . ; git submodule update --init --recursive }}"
 build: off
 matrix:
   fast_finish: true
@@ -17,3 +20,4 @@ test_script:
   - ls packages\\
   - ls packages\\non-core\\
   - ls packages\\non-core\\blaze\\
+  - ./meteor --get-ready
