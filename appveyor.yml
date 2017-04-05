@@ -1,0 +1,15 @@
+environment:
+  - nodejs_version: '4'
+cache:
+  - .meteor
+  - dev_bundle
+  - .babel-cache
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - set CI=true
+build: off
+matrix:
+  fast_finish: true
+test_script:
+  - node --version
+  - npm --version
