@@ -1721,7 +1721,7 @@ files.renameDirAlmostAtomically =
     // Get old dir out of the way, if it exists.
     var movedOldDir = true;
     try {
-      files.moveWithFsTolerance(toDir, garbageDir);
+      files.rename(toDir, garbageDir);
     } catch (e) {
       if (e.code !== 'ENOENT') {
         throw e;
@@ -1730,7 +1730,7 @@ files.renameDirAlmostAtomically =
     }
 
     // Now rename the directory.
-    files.moveWithFsTolerance(fromDir, toDir);
+    files.rename(fromDir, toDir);
 
     // ... and delete the old one.
     if (movedOldDir) {
