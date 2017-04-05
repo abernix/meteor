@@ -14,6 +14,7 @@ install:
   - set CI=true
   - git submodule sync
   - ps: >-
+      $PSVersionTable.PSVersion
       If(-not (git submodule update --init --recursive | out-null)) {
         Remove-Item -ErrorAction Ignore -Recurse -Force .git\\config
         Remove-Item -ErrorAction Ignore -Recurse -Force .git\\modules
