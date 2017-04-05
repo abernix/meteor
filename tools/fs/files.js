@@ -1672,14 +1672,6 @@ if (files.isWindowsLikeFilesystem()) {
   makeRenamesqueFunction("move");
 }
 
-// The move and moveSync functions from fs-extra, while great at many things
-// aren't capable of resolving busy filesystem issues (such as those encountered
-// on Windows) since it's not Fiber-aware.
-files.moveWithFsTolerance = Profile("files.moveWithFsTolerance", function (f, t) {
-  return callAndTolerateBusyFilesystem(fs.moveSync, fs.move,
-    files.convertToOSPath(f), files.convertToOSPath(t));
-});
-
 // Like rm -r.
 files.rm_recursive = Profile("files.rm_recursive", function (p) {
   return callAndTolerateBusyFilesystem(rimraf.sync, rimraf,
