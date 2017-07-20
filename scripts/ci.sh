@@ -42,4 +42,4 @@ set -e
 echo "Running warehouse self-tests"
 ./meteor self-test --headless \
     --with-tag "custom-warehouse" \
-    --exclude "$SELF_TEST_EXCLUDE" \
+    --exclude "$SELF_TEST_EXCLUDE"
