@@ -39,6 +39,8 @@ git submodule update --init --recursive
 # Also, if any uncaught errors slip through, fail the build.
 set -e
 
+export METEOR_SAVE_TMPDIRS=1
+
 echo "Running self-test (1): A-Com"
 ./meteor self-test --headless \
     --file "^[a-b]|^c[a-n]|^co[a-l]|^compiler-plugins" \
