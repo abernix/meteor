@@ -8,6 +8,7 @@ dependencies:
   pre:
     # https://github.com/meteor/docs/blob/version-NEXT/long-form/file-change-watcher-efficiency.md
     - echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+    - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern
   cache_directories:
     - "dev_bundle"
     - ".meteor"
@@ -26,4 +27,4 @@ test:
     - ./scripts/ci.sh :
         parallel: true
         timeout: 1200
-    - ls -la
+    - ls -la /tmp/core*
