@@ -10,6 +10,9 @@ MONGO_VERSION_64BIT=3.4.10
 MONGO_VERSION_32BIT=3.2.15
 NPM_VERSION=5.7.1
 
+# Use NODE_COMMIT_HASH from ../meteor _if_ it's set there and isn't set already.
+: ${NODE_COMMIT_HASH:=$(perl -ne 'print $1 if /NODE_COMMIT_HASH=(\S+)/' meteor)}
+
 # If we built Node from source on Jenkins, this is the build number.
 NODE_BUILD_NUMBER=
 

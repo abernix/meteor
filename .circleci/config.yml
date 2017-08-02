@@ -1,13 +1,5 @@
 version: 2
 
-# These directories are cached across all builds, currently with no
-# hashing mechanism, but we should consider doing it off dev_bundle.
-meteor_cache_dirs: &meteor_cache_dirs
-  paths:
-    - "dev_bundle"
-    - ".babel-cache"
-    - ".meteor"
-
 # A reusable "run" snippet which is ran before each test to setup the
 # environment for user-limits, core-dumps, etc.
 run_env_change: &run_env_change
@@ -54,6 +46,17 @@ run_log_mem_use: &run_log_mem_use
           echo "----------" >> $MEMUSELOG; \
           sleep 1; \
         done'
+
+# For whatever reason, the segfault signal doesn't happen when building from source.
+really_fail_if_core: &really_fail_if_core
+  name: Check for Core Dump
+  command: |
+    if compgen -G "/tmp/core_dumps/core.*" > /dev/null; then
+      echo "There's a core dump! Fail the build which hasn't failed yet!"
+
+      # fail the build!
+      false
+    fi
 
 # A reusable "run" snippet for saving the Node binary if a core dump is present.
 run_save_node_bin: &run_save_node_bin
@@ -121,17 +124,16 @@ jobs:
           # https://discuss.circleci.com/t/git-submodule-url-isnt-playing-nice-with-the-cache/549/3
           name: Git Submodules.
           command: (git submodule sync && git submodule update --init --recursive) || (rm -fr .git/config .git/modules && git submodule deinit -f . && git submodule update --init --recursive)
-      - restore_cache:
-          key: meteor-cache
-      - restore_cache:
-          keys: 
-            - test-groups-v1-{{ .Branch }}
-            - test-groups-v1
       - run:
           name: Create Test Results Directory
           command: |
             sudo mkdir -p ./tmp/results/junit
             sudo chmod a+rwx ./tmp/results/junit
+      - run:
+          name: Generate Dev Bundle
+          command: |
+            rm -rf dev_bundle/
+            ./scripts/generate-dev-bundle.sh
       - run:
           name: Get Ready
           command: |
@@ -144,6 +146,8 @@ jobs:
           name: Clear npm cache
           command: ./meteor npm cache clear --force
       - run:
+          <<: *really_fail_if_core
+      - run:
           <<: *run_save_node_bin
       - persist_to_workspace:
           root: .
@@ -153,16 +157,7 @@ jobs:
       - store_artifacts:
           path: /tmp/memuse.txt
 
-  save_caches:
-    <<: *build_machine_environment
-    steps:
-      - attach_workspace:
-          at: .
-      - save_cache:
-          key: meteor-cache
-          <<: *meteor_cache_dirs
-
-  Isolated Tests:
+  Autoupdate:
     <<: *build_machine_environment
     steps:
       - run:
@@ -231,6 +226,8 @@ jobs:
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
       - run:
+          <<: *really_fail_if_core
+      - run:
           <<: *run_save_node_bin
       - store_test_results:
           path: ./tmp/results
@@ -270,6 +267,8 @@ jobs:
               --junit ./tmp/results/junit/1.xml \
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
+      - run:
+          <<: *really_fail_if_core
       - run:
           <<: *run_save_node_bin
       - store_test_results:
@@ -311,6 +310,8 @@ jobs:
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
       - run:
+          <<: *really_fail_if_core
+      - run:
           <<: *run_save_node_bin
       - store_test_results:
           path: ./tmp/results
@@ -350,6 +351,8 @@ jobs:
               --junit ./tmp/results/junit/3.xml \
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
+      - run:
+          <<: *really_fail_if_core
       - run:
           <<: *run_save_node_bin
       - store_test_results:

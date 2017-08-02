@@ -2,6 +2,9 @@
 
 BUNDLE_VERSION=8.10.0
 
+# TODO: XXX: REMOVE: JESSE: Build specific versions in the dev bundle.
+NODE_COMMIT_HASH=
+
 # OS Check. Put here because here is where we download the precompiled
 # bundles that are arch specific.
 UNAME=$(uname)
