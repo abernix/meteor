@@ -71,6 +71,8 @@ else
     exit 1
 fi
 
+NODE_SRC_TGZ="node-v${NODE_VERSION}.tar.gz"
+
 SCRIPTS_DIR=$(dirname $0)
 cd "$SCRIPTS_DIR/.."
 CHECKOUT_DIR=$(pwd)
