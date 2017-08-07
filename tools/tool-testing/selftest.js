@@ -32,6 +32,7 @@ import { FinishedUpgraders } from '../project-context.js';
 import { allUpgraders } from '../upgraders.js';
 import { execFileSync } from '../utils/processes.js';
 import { ensureDependencies } from '../cli/dev-bundle-helpers.js';
+import { inspect } from 'util';
 
 const DEV_DEPENDENCY_VERSIONS = {
   'phantomjs-prebuilt': '2.1.14',
@@ -1613,6 +1614,7 @@ class Test {
     this.fileHash = options.fileHash;
     this.tags = options.tags || [];
     this.f = options.func;
+    this.durationMs = null;
     this.cleanupHandlers = [];
   }
 
@@ -1805,6 +1807,16 @@ function getFilteredTests(options) {
   return new TestList(allTests, tagsToSkip, tagsToMatch, testState);
 };
 
+function groupTestsByFile(tests) {
+  const grouped = {};
+  tests.forEach(test => {
+    grouped[test.file] = grouped[test.file] || [];
+    grouped[test.file].push(test);
+  });
+
+  return grouped;
+}
+
 // A TestList is the result of getFilteredTests.  It holds the original
 // list of all tests, the filtered list, and stats on how many tests
 // were skipped (see generateSkipReport).
@@ -1864,8 +1876,107 @@ class TestList {
   // Mark a test's file as having failures.  This prevents
   // saveTestState from saving its hash as a potentially
   // "unchanged" file to be skipped in a future run.
-  notifyFailed(test) {
+  notifyFailed(test, failure) {
     this.fileInfo[test.file].hasFailures = true;
+    test.failure = failure || true;
+  }
+
+  saveJUnitOutput(path) {
+    const grouped = groupTestsByFile(this.filteredTests);
+
+    // All tests represent a "testsuite".
+    // A "testsuite" has multiple "testcase"s
+    const testCases = [];
+
+    const attrSafe = (attr) => (attr || "").replace('"', "&quot;");
+    const durationForOutput = (durationMs) => durationMs / 1000;
+
+    const skipCount =
+      Object.values(this.skipCounts)
+        .reduce((sum, value) => sum + value, 0);
+
+    let countError = 0;
+    let countFailure = 0;
+
+    Object.keys(grouped).forEach((file) => {
+      // Each test is a "testcase".
+      grouped[file].forEach((test) => {
+        const testCaseAttrs = [
+          `group="${test.file}"`,
+          `name="${attrSafe(test.name)}"`,
+        ];
+
+        if (test.durationMs) {
+          testCaseAttrs.push(`time="${durationForOutput(test.durationMs)}"`);
+        }
+
+        const testCaseAttrsString = testCaseAttrs.join(' ');
+
+        if (test.failure) {
+          let failureElement = "";
+
+          // Not intuitive, but an instantiated TestFailure is an "error", and
+          // if it's something else it's a "failure".
+          if (test.failure instanceof TestFailure) {
+            // failure = error
+            countError++;
+
+            let errorBody = "";
+            try {
+              errorBody = JSON.stringify(test.failure.details, undefined, 2);
+            } catch (err) {
+              // If it fails for any reason (circular?), just show un-indented.
+              errorBody = inspect(test.failure.details, { depth: 4 });
+            }
+
+            failureElement = [
+              `<error type="${test.failure.reason}">`,
+              errorBody,
+              '</error>',
+            ].join('\n');
+          } else {
+            // failure = failure
+            countFailure++;
+            failureElement = [
+              '<failure>',
+              test.failure.stack,
+              '</failure>',
+            ].join('\n');
+          }
+
+          testCases.push(
+            [
+              `<testcase ${testCaseAttrsString}>`,
+              failureElement,
+              '</testcase>',
+            ].join('\n')
+          );
+        } else {
+          testCases.push(`<testcase ${testCaseAttrsString}/>`);
+        }
+      });
+    });
+
+    const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
+
+    const testSuiteAttrs = [
+      'name="Test Run"',
+      `tests="${testCases.length}"`,
+      `skipped="${skipCount}"`,
+      `failures="${countFailure}"`,
+      `errors="${countError}"`,
+      `time="${durationForOutput(this.durationMs)}"`,
+    ];
+
+    const testSuiteAttrsString = testSuiteAttrs.join(' ');
+
+    const testSuiteString = [
+      `<testsuite ${testSuiteAttrsString}>`,
+      testCases.join('\n'),
+      '</testsuite>',
+    ].join('\n');
+
+    files.writeFile(path, xmlHeader + '\n' + testSuiteString, 'utf8');
   }
 
   // If this TestList was constructed with a testState,
@@ -1941,17 +2052,11 @@ export function listTests(options) {
     return;
   }
 
-  const testsGroupedByFile = {};
-  testList.filteredTests.forEach(filteredTest => {
-    testsGroupedByFile[filteredTest.file] =
-      testsGroupedByFile[filteredTest.file] || [];
+  const grouped = groupTestsByFile(testList.filteredTests);
 
-    testsGroupedByFile[filteredTest.file].push(filteredTest);
-  });
-
-  Object.keys(testsGroupedByFile).forEach((file) => {
+  Object.keys(grouped).forEach((file) => {
     Console.rawInfo(file + ':\n');
-    testsGroupedByFile[file].forEach((test) => {
+    grouped[file].forEach((test) => {
       Console.rawInfo('  - ' + test.name +
                       (test.tags.length ? ' [' + test.tags.join(' ') + ']'
                       : '') + '\n');
@@ -1979,6 +2084,8 @@ export function runTests(options) {
     return 0;
   }
 
+  testList.startTime = new Date;
+
   let totalRun = 0;
   const failedTests = [];
 
@@ -1987,6 +2094,9 @@ export function runTests(options) {
     Console.error(test.file + ": " + test.name + " ... ");
     runTest(test);
   });
+
+  testList.endTime = new Date;
+  testList.durationMs = testList.endTime - testList.startTime;
 
   function runTest(test, tries = 3) {
     let failure = null;
@@ -2005,6 +2115,8 @@ export function runTests(options) {
       test.cleanup();
     }
 
+    test.durationMs = +(new Date) - startTime;
+
     if (failure) {
       Console.error("... fail!", Console.options({ indent: 2 }));
 
@@ -2016,9 +2128,6 @@ export function runTests(options) {
 
         return runTest(test, tries);
       }
-
-      failedTests.push(test);
-      testList.notifyFailed(test);
 
       if (failure instanceof TestFailure) {
         const frames = parseStackParse(failure).outsideFiber;
@@ -2072,15 +2181,21 @@ export function runTests(options) {
       } else {
         Console.rawError("  => Test threw exception: " + failure.stack + "\n");
       }
+
+      failedTests.push(test);
+      testList.notifyFailed(test, failure);
     } else {
-      const durationMs = +(new Date) - startTime;
       Console.error(
-        "... ok (" + durationMs + " ms)",
+        "... ok (" + test.durationMs + " ms)",
         Console.options({ indent: 2 }));
     }
   }
 
   testList.saveTestState();
+
+  if (options.junit) {
+    testList.saveJUnitOutput(options.junit);
+  }
 
   if (totalRun > 0) {
     Console.error();
