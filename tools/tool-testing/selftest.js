@@ -1878,6 +1878,7 @@ class TestList {
     const testSuites = [];
 
     const attrSafe = (attr) => (attr || "").replace('"', "&quot;");
+    const durationForOutput = (durationMs) => durationMs / 1000;
 
     // Each file is a "testsuite".
     Object.keys(grouped).forEach((file) => {
@@ -1888,11 +1889,12 @@ class TestList {
       // Each test inside a file is a "testcase".
       grouped[file].forEach((test) => {
         const testCaseAttrs = [
+          `classname="${test.file}"`, // required by JUnit spec.
           `name="${attrSafe(test.name)}"`,
         ];
 
         if (test.durationMs) {
-          testCaseAttrs.push(`time="${test.durationMs / 1000}"`);
+          testCaseAttrs.push(`time="${durationForOutput(test.durationMs)}"`);
         }
 
         const testCaseAttrsString = testCaseAttrs.join(' ');
@@ -1935,9 +1937,13 @@ class TestList {
       const testSuiteAttrs = [
         `id="${testSuites.length}"`,
         `name="${file}"`,
+        `timestamp="${(new Date()).toISOString()}"`,
+        `hostname="localhost"`,
         `tests="${testCases.length}"`,
+        `skipped="0"`, // TODO make this real.
         `failures="${countFailure}"`,
         `errors="${countError}"`,
+        `time="${durationForOutput(this.durationMs)}"`,
       ];
 
       const testSuiteAttrsString = testSuiteAttrs.join(' ');
@@ -1951,13 +1957,15 @@ class TestList {
       testSuites.push(testSuiteString);
     });
 
+    const xmlHeader = `<?xml version="1.0" encoding="UTF-8"?>`;
+
     const testSuitesString = [
       `<testsuites>`,
       testSuites.join('\n'),
       `</testsuites>`,
     ].join('\n');
 
-    files.writeFile(path, testSuitesString, 'utf8');
+    files.writeFile(path, xmlHeader + '\n' + testSuitesString, 'utf8');
   }
 
   // If this TestList was constructed with a testState,
@@ -2065,6 +2073,8 @@ export function runTests(options) {
     return 0;
   }
 
+  testList.startTime = new Date;
+
   let totalRun = 0;
   const failedTests = [];
 
@@ -2073,6 +2083,9 @@ export function runTests(options) {
     Console.error(test.file + ": " + test.name + " ... ");
     runTest(test);
   });
+
+  testList.endTime = new Date;
+  testList.durationMs = testList.endTime - testList.startTime;
 
   function runTest(test, tries = 3) {
     let failure = null;
