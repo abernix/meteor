@@ -62,7 +62,7 @@ build_machine_environment: &build_machine_environment
   # Specify that we want an actual machine (ala Circle 1.0), not a Docker image.
   machine: true
   environment:
-    NODE_COMMIT_HASH: 12300626d705d7e07f07bec5885d56518ccc97a3
+    NODE_COMMIT_HASH: 2997b79fccd84d81117f578224535d20d0a4e424
 
     # This multiplier scales the waitSecs for selftests.
     TIMEOUT_SCALE_FACTOR: 4
