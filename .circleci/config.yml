@@ -121,6 +121,11 @@ jobs:
       - restore_cache:
           key: meteor-cache
       - run:
+          name: Generate Dev Bundle
+          command: |
+            rm -rf dev_bundle/
+            ./scripts/generate-dev-bundle.sh
+      - run:
           name: Get Ready
           command: |
             eval $PRE_TEST_COMMANDS;
