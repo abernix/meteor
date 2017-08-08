@@ -83,6 +83,7 @@ build_machine_environment: &build_machine_environment
     # Skip these tests on every test run.
     # For readability, this is a regex wrapped across multiple lines in quotes.
     SELF_TEST_EXCLUDE: "\
+        ^assets -|\
         ^old cli tests|\
         ^minifiers can't register non-js|\
         ^minifiers: apps can't use|\
