@@ -166,13 +166,14 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: "Running warehouse self-tests"
+          name: "Running self-test (1): A-Com"
           command: |
             eval $PRE_TEST_COMMANDS;
             ./meteor self-test \
               --exclude "${SELF_TEST_EXCLUDE}" \
               --headless \
-              --with-tag "custom-warehouse"
+              --file '^[a-b]|^c[a-n]|^co[a-l]|^compiler-plugins' \
+              --without-tag "custom-warehouse"
           no_output_timeout: 20m
       - run:
           <<: *run_save_node_bin
@@ -223,13 +224,13 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name "Running self-test (2): Con-K"
+          name: "Running self-test (1): A-Com"
           command: |
             eval $PRE_TEST_COMMANDS;
             ./meteor self-test \
               --exclude "${SELF_TEST_EXCLUDE}" \
               --headless \
-              --file "^co[n-z]|^c[p-z]|^[d-k]" \
+              --file '^[a-b]|^c[a-n]|^co[a-l]|^compiler-plugins' \
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
       - run:
@@ -252,13 +253,13 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: "Running self-test (3): L-O"
+          name: "Running self-test (1): A-Com"
           command: |
             eval $PRE_TEST_COMMANDS;
             ./meteor self-test \
               --exclude "${SELF_TEST_EXCLUDE}" \
               --headless \
-              --file '^[l-o]' \
+              --file '^[a-b]|^c[a-n]|^co[a-l]|^compiler-plugins' \
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
       - run:
