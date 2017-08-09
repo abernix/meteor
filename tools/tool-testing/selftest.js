@@ -1875,21 +1875,25 @@ class TestList {
   saveJUnitOutput(path) {
     const grouped = groupTestsByFile(this.filteredTests);
 
-    const testSuites = [];
+    // All tests represent a "testsuite".
+    // A "testsuite" has multiple "testcase"s
+    const testCases = [];
 
     const attrSafe = (attr) => (attr || "").replace('"', "&quot;");
     const durationForOutput = (durationMs) => durationMs / 1000;
 
-    // Each file is a "testsuite".
-    Object.keys(grouped).forEach((file) => {
-      const testCases = [];
-      let countError = 0;
-      let countFailure = 0;
+    const skipCount =
+      Object.values(this.skipCounts)
+        .reduce((sum, value) => sum + value, 0);
 
-      // Each test inside a file is a "testcase".
+    let countError = 0;
+    let countFailure = 0;
+
+    Object.keys(grouped).forEach((file) => {
+      // Each test is a "testcase".
       grouped[file].forEach((test) => {
         const testCaseAttrs = [
-          `classname="${test.file}"`, // required by JUnit spec.
+          `group="${test.file}"`,
           `name="${attrSafe(test.name)}"`,
         ];
 
@@ -1910,15 +1914,15 @@ class TestList {
             failureElement = [
               `<error type="${test.failure.reason}">`,
               JSON.stringify(test.failure.details, undefined, 2),
-              `</error>`
+              '</error>',
             ].join('\n');
           } else {
             // failure = failure
             countFailure++;
             failureElement = [
-              `<failure>`,
+              '<failure>',
               test.failure.stack,
-              `</failure>`,
+              '</failure>',
             ].join('\n');
           }
 
@@ -1926,43 +1930,35 @@ class TestList {
             [
               `<testcase ${testCaseAttrsString}>`,
               failureElement,
-              `</testcase>`,
+              '</testcase>',
             ].join('\n')
           );
         } else {
           testCases.push(`<testcase ${testCaseAttrsString}/>`);
         }
       });
-
-      const testSuiteAttrs = [
-        `name="${file}"`,
-        `tests="${testCases.length}"`,
-        `skipped="0"`, // TODO make this real.
-        `failures="${countFailure}"`,
-        `errors="${countError}"`,
-        `time="${durationForOutput(this.durationMs)}"`,
-      ];
-
-      const testSuiteAttrsString = testSuiteAttrs.join(' ');
-
-      const testSuiteString = [
-        `<testsuite ${testSuiteAttrsString}>`,
-        testCases.join('\n'),
-        `</testsuite>`,
-      ].join('\n');
-
-      testSuites.push(testSuiteString);
     });
 
-    const xmlHeader = `<?xml version="1.0" encoding="UTF-8"?>`;
+    const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
 
-    const testSuitesString = [
-      `<testsuites>`,
-      testSuites.join('\n'),
-      `</testsuites>`,
+    const testSuiteAttrs = [
+      'name="Test Run"',
+      `tests="${testCases.length}"`,
+      `skipped="${skipCount}"`,
+      `failures="${countFailure}"`,
+      `errors="${countError}"`,
+      `time="${durationForOutput(this.durationMs)}"`,
+    ];
+
+    const testSuiteAttrsString = testSuiteAttrs.join(' ');
+
+    const testSuiteString = [
+      `<testsuite ${testSuiteAttrsString}>`,
+      testCases.join('\n'),
+      '</testsuite>',
     ].join('\n');
 
-    files.writeFile(path, xmlHeader + '\n' + testSuitesString, 'utf8');
+    files.writeFile(path, xmlHeader + '\n' + testSuiteString, 'utf8');
   }
 
   // If this TestList was constructed with a testState,
