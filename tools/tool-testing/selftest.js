@@ -1935,10 +1935,7 @@ class TestList {
       });
 
       const testSuiteAttrs = [
-        `id="${testSuites.length}"`,
         `name="${file}"`,
-        `timestamp="${(new Date()).toISOString()}"`,
-        `hostname="localhost"`,
         `tests="${testCases.length}"`,
         `skipped="0"`, // TODO make this real.
         `failures="${countFailure}"`,
