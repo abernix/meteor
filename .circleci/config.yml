@@ -182,6 +182,8 @@ jobs:
       - store_test_results:
           path: /tmp/results
       - store_artifacts:
+          path: /tmp/results
+      - store_artifacts:
           path: /tmp/core_dumps
       - store_artifacts:
           path: /tmp/memuse.txt
@@ -212,6 +214,8 @@ jobs:
           key: meteor-cache
           <<: *meteor_cache_dirs
       - store_test_results:
+          path: /tmp/results
+      - store_artifacts:
           path: /tmp/results
       - store_artifacts:
           path: /tmp/core_dumps
@@ -246,6 +250,8 @@ jobs:
       - store_test_results:
           path: /tmp/results
       - store_artifacts:
+          path: /tmp/results
+      - store_artifacts:
           path: /tmp/core_dumps
       - store_artifacts:
           path: /tmp/memuse.txt
@@ -276,6 +282,8 @@ jobs:
           key: meteor-cache
           <<: *meteor_cache_dirs
       - store_test_results:
+          path: /tmp/results
+      - store_artifacts:
           path: /tmp/results
       - store_artifacts:
           path: /tmp/core_dumps
@@ -310,6 +318,8 @@ jobs:
       - store_test_results:
           path: /tmp/results
       - store_artifacts:
+          path: /tmp/results
+      - store_artifacts:
           path: /tmp/core_dumps
       - store_artifacts:
           path: /tmp/memuse.txt
@@ -340,6 +350,8 @@ jobs:
           key: meteor-cache
           <<: *meteor_cache_dirs
       - store_test_results:
+          path: /tmp/results
+      - store_artifacts:
           path: /tmp/results
       - store_artifacts:
           path: /tmp/core_dumps
@@ -374,6 +386,8 @@ jobs:
       - store_test_results:
           path: /tmp/results
       - store_artifacts:
+          path: /tmp/results
+      - store_artifacts:
           path: /tmp/core_dumps
       - store_artifacts:
           path: /tmp/memuse.txt
@@ -404,6 +418,8 @@ jobs:
           key: meteor-cache
           <<: *meteor_cache_dirs
       - store_test_results:
+          path: /tmp/results
+      - store_artifacts:
           path: /tmp/results
       - store_artifacts:
           path: /tmp/core_dumps
