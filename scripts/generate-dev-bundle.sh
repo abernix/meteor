@@ -21,9 +21,10 @@ S3_HOST="s3.amazonaws.com/com.meteor.jenkins"
 if [ ! -z ${NODE_FROM_SRC+x} ] || [ ! -z ${NODE_COMMIT_HASH+x} ]; then
   if [ ! -z ${NODE_COMMIT_HASH+x} ]; then
     ${NODE_FROM_SRC:=true}
-    echo "Getting this thing";
+    echo "Building Node source from Git hash ${NODE_COMMIT_HASH}...";
     NODE_URL="https://github.com/nodejs/node/archive/${NODE_COMMIT_HASH}.tar.gz"
   else
+    echo "Build Node source from ${NODE_VERSION} source...";
     NODE_URL="https://nodejs.org/dist/v${NODE_VERSION}/${NODE_SRC_TGZ}"
   fi
 else
@@ -33,19 +34,19 @@ fi
 # Also make sure to update NODE_VERSION in generate-dev-bundle.ps1.
 function downloadNode {
   echo "Downloading Node from ${NODE_URL}"
-  curl -L "${NODE_URL}" | tar zx --strip-components 1
+  curl -sL "${NODE_URL}" | tar zx --strip-components 1
 }
 
 if [ ! -z ${NODE_FROM_SRC+x} ]; then
   mkdir node-src/ && cd node-src/
   downloadNode
   if [ "${NODE_FROM_SRC:-}" = "debug" ]; then
-    ./configure --debug --prefix "${DIR}"
+    ./configure --debug --prefix "${DIR}" 2>&1 > /dev/null
   else
-    ./configure --prefix "${DIR}"
+    ./configure --prefix "${DIR}" 2>&1 > /dev/null
   fi
-  make -j4
-  make install
+  make -j4 2>&1 > /dev/null
+  make install 2>&1 > /dev/null
   export npm_config_nodedir="${DIR}/node-src"
   cd "$DIR"
 else
