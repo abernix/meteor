@@ -132,7 +132,7 @@ cp -R node_modules/* "${DIR}/lib/node_modules/"
 # commands like node-gyp and node-pre-gyp.
 cp -R node_modules/.bin "${DIR}/lib/node_modules/"
 
-if [ -z ${NODE_COMMIT_HASH+x} ]; then
+if [ -z ${NODE_FROM_SRC+x} ]; then
   # Make node-gyp install Node headers and libraries in $DIR/.node-gyp/.
   # https://github.com/nodejs/node-gyp/blob/4ee31329e0/lib/node-gyp.js#L52
   export HOME="$DIR"
@@ -142,7 +142,7 @@ if [ -z ${NODE_COMMIT_HASH+x} ]; then
   echo "Contents of ${INCLUDE_PATH}:"
   ls -al "$INCLUDE_PATH"
 else
-  echo "Skipping node-gyp headers because we're running from a Git hash."
+  echo "Skipping node-gyp headers because we're building from source."
 fi
 
 cd "${DIR}/lib"
