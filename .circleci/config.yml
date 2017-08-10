@@ -47,6 +47,17 @@ run_log_mem_use: &run_log_mem_use
           sleep 1; \
         done'
 
+# For whatever reason, the segfault signal doesn't happen when building from source.
+really_fail_if_core: &really_fail_if_core
+  name: Check for Core Dump
+  command: |
+    if compgen -G "/tmp/core_dumps/core.*" > /dev/null; then
+      echo "There's a core dump! Fail the build which hasn't failed yet!"
+
+      # fail the build!
+      false
+    fi
+
 # A reusable "run" snippet for saving the Node binary if a core dump is present.
 run_save_node_bin: &run_save_node_bin
   name: Save Node Binary
@@ -141,6 +152,8 @@ jobs:
           name: Test Prereqs
           command: ./meteor npm install -g phantomjs-prebuilt browserstack-webdriver
       - run:
+          <<: *really_fail_if_core
+      - run:
           <<: *run_save_node_bin
       - persist_to_workspace:
           root: .
@@ -179,6 +192,8 @@ jobs:
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
       - run:
+          <<: *really_fail_if_core
+      - run:
           <<: *run_save_node_bin
       - save_cache:
           key: meteor-cache
@@ -207,6 +222,8 @@ jobs:
               --file '^[a-b]|^c[a-n]|^co[a-l]|^compiler-plugins' \
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
+      - run:
+          <<: *really_fail_if_core
       - run:
           <<: *run_save_node_bin
       - save_cache:
@@ -237,6 +254,8 @@ jobs:
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
       - run:
+          <<: *really_fail_if_core
+      - run:
           <<: *run_save_node_bin
       - save_cache:
           key: meteor-cache
@@ -265,6 +284,8 @@ jobs:
               --file '^[a-b]|^c[a-n]|^co[a-l]|^compiler-plugins' \
               --without-tag "custom-warehouse"
           no_output_timeout: 20m
+      - run:
+          <<: *really_fail_if_core
       - run:
           <<: *run_save_node_bin
       - save_cache:
