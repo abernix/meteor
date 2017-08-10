@@ -22,7 +22,7 @@ if [ ! -z ${NODE_FROM_SRC+x} ] || [ ! -z ${NODE_COMMIT_HASH+x} ]; then
   if [ ! -z ${NODE_COMMIT_HASH+x} ]; then
     ${NODE_FROM_SRC:=true}
     echo "Building Node source from Git hash ${NODE_COMMIT_HASH}...";
-    NODE_URL="https://github.com/nodejs/node/archive/${NODE_COMMIT_HASH}.tar.gz"
+    NODE_URL="https://github.com/abernix/node/archive/${NODE_COMMIT_HASH}.tar.gz"
   else
     echo "Build Node source from ${NODE_VERSION} source...";
     NODE_URL="https://nodejs.org/dist/v${NODE_VERSION}/${NODE_SRC_TGZ}"

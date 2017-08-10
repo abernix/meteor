@@ -73,7 +73,8 @@ build_machine_environment: &build_machine_environment
   # Specify that we want an actual machine (ala Circle 1.0), not a Docker image.
   machine: true
   environment:
-    NODE_FROM_SRC: debug
+    NODE_FROM_SRC: true
+    NODE_COMMIT_HASH: 63aa1abd0cdc27efd9e1d518634ccb93088dc4ea
 
     # This multiplier scales the waitSecs for selftests.
     TIMEOUT_SCALE_FACTOR: 4
