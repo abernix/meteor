@@ -21,4 +21,5 @@ TAGS
 npm-debug.log
 universe
 .babel-cache
+.eslintignore
 mongo-test-output
