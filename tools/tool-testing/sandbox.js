@@ -38,7 +38,7 @@
 //   - browserstack: true if browserstack clients should be used
 //   - port: the port that the clients should run on
 import * as files from '../fs/files.js';
-import PhantomClient from './clients/phantom.js';
+import ChromeClient from './clients/chrome.js';
 import BrowserStackClient from './clients/browserstack.js';
 import Builder from '../isobuild/builder.js';
 import Run from './run.js';
@@ -83,7 +83,7 @@ export default class Sandbox {
       this._makeWarehouse(options.warehouse);
     }
 
-    this.clients = [new PhantomClient({
+    this.clients = [new ChromeClient({
       host: 'localhost',
       port: options.clients.port || 3000,
     })];

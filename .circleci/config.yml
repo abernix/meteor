@@ -51,6 +51,13 @@ run_log_mem_use: &run_log_mem_use
           sleep 1; \
         done'
 
+update_chrome: &update_chrome
+  name: Update Chrome
+  command: |
+    curl -L -o google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome.deb
+    rm google-chrome.deb
+
 # A reusable "run" snippet for saving the Node binary if a core dump is present.
 run_save_node_bin: &run_save_node_bin
   name: Save Node Binary
@@ -159,6 +166,8 @@ jobs:
     <<: *build_machine_environment
     steps:
       - run:
+          <<: *update_chrome
+      - run:
           <<: *run_log_mem_use
       - run:
           <<: *run_env_change
@@ -191,6 +200,8 @@ jobs:
   Group 1:
     <<: *build_machine_environment
     steps:
+      - run:
+          <<: *update_chrome
       - run:
           <<: *run_log_mem_use
       - run:
@@ -226,6 +237,8 @@ jobs:
     <<: *build_machine_environment
     steps:
       - run:
+          <<: *update_chrome
+      - run:
           <<: *run_log_mem_use
       - run:
           <<: *run_env_change
@@ -259,6 +272,8 @@ jobs:
   Group 3:
     <<: *build_machine_environment
     steps:
+      - run:
+          <<: *update_chrome
       - run:
           <<: *run_log_mem_use
       - run:
@@ -294,6 +309,8 @@ jobs:
     <<: *build_machine_environment
     steps:
       - run:
+          <<: *update_chrome
+      - run:
           <<: *run_log_mem_use
       - run:
           <<: *run_env_change
@@ -327,6 +344,8 @@ jobs:
   Group 5:
     <<: *build_machine_environment
     steps:
+      - run:
+          <<: *update_chrome
       - run:
           <<: *run_log_mem_use
       - run:
@@ -362,6 +381,8 @@ jobs:
     <<: *build_machine_environment
     steps:
       - run:
+          <<: *update_chrome
+      - run:
           <<: *run_log_mem_use
       - run:
           <<: *run_env_change
@@ -395,6 +416,8 @@ jobs:
   Group 7:
     <<: *build_machine_environment
     steps:
+      - run:
+          <<: *update_chrome
       - run:
           <<: *run_log_mem_use
       - run:
