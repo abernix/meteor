@@ -31,6 +31,7 @@ import { current as releaseCurrent } from '../packaging/release.js';
 import { FinishedUpgraders } from '../project-context.js';
 import { allUpgraders } from '../upgraders.js';
 import { execFileSync } from '../utils/processes.js';
+import { inspect } from 'util';
 
 function checkTestOnlyDependency(name) {
   try {
@@ -1911,9 +1912,18 @@ class TestList {
           if (test.failure instanceof TestFailure) {
             // failure = error
             countError++;
+
+            let errorBody = "";
+            try {
+              errorBody = JSON.stringify(test.failure.details, undefined, 2);
+            } catch (err) {
+              // If it fails for any reason (circular?), just show un-indented.
+              errorBody = inspect(test.failure.details, { depth: 4 });
+            }
+
             failureElement = [
               `<error type="${test.failure.reason}">`,
-              JSON.stringify(test.failure.details, undefined, 2),
+              errorBody,
               '</error>',
             ].join('\n');
           } else {
