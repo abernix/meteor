@@ -393,15 +393,20 @@ class TestList {
 
             failureElement = [
               `<error type="${test.failure.reason}">`,
+              '<![CDATA[',
               errorBody,
+              ']]>',
               '</error>',
             ].join('\n');
           } else {
             // failure = failure
             countFailure++;
+
             failureElement = [
               '<failure>',
+              '<![CDATA[',
               test.failure.stack,
+              ']]>',
               '</failure>',
             ].join('\n');
           }
