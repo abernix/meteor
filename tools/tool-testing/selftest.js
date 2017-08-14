@@ -352,10 +352,6 @@ class TestList {
     const attrSafe = attr => (attr || "").replace('"', "&quot;");
     const durationForOutput = durationMs => durationMs / 1000;
 
-    const skipCount =
-      Object.values(this.skipCounts)
-        .reduce((sum, value) => sum + value, 0);
-
     // Each file is a testsuite.
     Object.keys(grouped).forEach((file) => {
       const testCases = [];
@@ -366,7 +362,6 @@ class TestList {
       // Each test is a "testcase".
       grouped[file].forEach((test) => {
         const testCaseAttrs = [
-          `group="${test.file}"`,
           `name="${attrSafe(test.name)}"`,
         ];
 
@@ -416,7 +411,6 @@ class TestList {
       const testSuiteAttrs = [
         `name="${file}"`,
         `tests="${testCases.length}"`,
-        `skipped="${skipCount}"`,
         `failures="${countFailure}"`,
         `errors="${countError}"`,
         `time="${durationForOutput(this.durationMs)}"`,
