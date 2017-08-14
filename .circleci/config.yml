@@ -74,7 +74,7 @@ build_machine_environment: &build_machine_environment
   machine: true
   environment:
     NODE_FROM_SRC: true
-    NODE_COMMIT_HASH: daccbf030a1b39319f9b2eb84193e47896a5c45b
+    NODE_COMMIT_HASH: 277284d3cc186251cf5d7b44a77c1fccb4855aab
 
     # This multiplier scales the waitSecs for selftests.
     TIMEOUT_SCALE_FACTOR: 4
