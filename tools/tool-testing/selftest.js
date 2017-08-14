@@ -346,21 +346,23 @@ class TestList {
   saveJUnitOutput(path) {
     const grouped = groupTestsByFile(this.filteredTests);
 
-    // All tests represent a "testsuite".
-    // A "testsuite" has multiple "testcase"s
-    const testCases = [];
+    // We'll form an collection of "testsuites"
+    const testSuites = [];
 
-    const attrSafe = (attr) => (attr || "").replace('"', "&quot;");
-    const durationForOutput = (durationMs) => durationMs / 1000;
+    const attrSafe = attr => (attr || "").replace('"', "&quot;");
+    const durationForOutput = durationMs => durationMs / 1000;
 
     const skipCount =
       Object.values(this.skipCounts)
         .reduce((sum, value) => sum + value, 0);
 
-    let countError = 0;
-    let countFailure = 0;
-
+    // Each file is a testsuite.
     Object.keys(grouped).forEach((file) => {
+      const testCases = [];
+
+      let countError = 0;
+      let countFailure = 0;
+
       // Each test is a "testcase".
       grouped[file].forEach((test) => {
         const testCaseAttrs = [
@@ -377,30 +379,18 @@ class TestList {
         if (test.failure) {
           let failureElement = "";
 
-          // Not intuitive, but an instantiated TestFailure is an "error", and
-          // if it's something else it's a "failure".
           if (test.failure instanceof TestFailure) {
-            // failure = error
-            countError++;
-
-            let errorBody = "";
-            try {
-              errorBody = JSON.stringify(test.failure.details, undefined, 2);
-            } catch (err) {
-              // If it fails for any reason (circular?), just show un-indented.
-              errorBody = inspect(test.failure.details, { depth: 4 });
-            }
+            countFailure++;
 
             failureElement = [
               `<error type="${test.failure.reason}">`,
               '<![CDATA[',
-              errorBody,
+              inspect(test.failure.details, { depth: 4 }),
               ']]>',
               '</error>',
             ].join('\n');
           } else {
-            // failure = failure
-            countFailure++;
+            countError++;
 
             failureElement = [
               '<failure>',
@@ -416,34 +406,46 @@ class TestList {
               `<testcase ${testCaseAttrsString}>`,
               failureElement,
               '</testcase>',
-            ].join('\n')
+            ].join('\n'),
           );
         } else {
           testCases.push(`<testcase ${testCaseAttrsString}/>`);
         }
       });
+
+      const testSuiteAttrs = [
+        `name="${file}"`,
+        `tests="${testCases.length}"`,
+        `skipped="${skipCount}"`,
+        `failures="${countFailure}"`,
+        `errors="${countError}"`,
+        `time="${durationForOutput(this.durationMs)}"`,
+      ];
+
+      const testSuiteAttrsString = testSuiteAttrs.join(' ');
+
+      testSuites.push(
+        [
+          `<testsuite ${testSuiteAttrsString}>`,
+          testCases.join('\n'),
+          '</testsuite>',
+        ].join('\n'),
+      );
     });
 
     const xmlHeader = '<?xml version="1.0" encoding="UTF-8"?>';
 
-    const testSuiteAttrs = [
-      'name="Test Run"',
-      `tests="${testCases.length}"`,
-      `skipped="${skipCount}"`,
-      `failures="${countFailure}"`,
-      `errors="${countError}"`,
-      `time="${durationForOutput(this.durationMs)}"`,
-    ];
+    const testSuitesString = testSuites.join('\n');
 
-    const testSuiteAttrsString = testSuiteAttrs.join(' ');
-
-    const testSuiteString = [
-      `<testsuite ${testSuiteAttrsString}>`,
-      testCases.join('\n'),
-      '</testsuite>',
-    ].join('\n');
-
-    files.writeFile(path, xmlHeader + '\n' + testSuiteString, 'utf8');
+    files.writeFile(path,
+      [
+        xmlHeader,
+        `<testsuites>`,
+        testSuitesString,
+        `</testsuites>`,
+      ].join('\n'),
+      'utf8',
+    );
   }
 
   // If this TestList was constructed with a testState,
