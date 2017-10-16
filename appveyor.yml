@@ -37,12 +37,7 @@ test_script:
           'autoupdate'
           'colons'
         )
-
-        cmd.exe /C .\meteor.bat self-test `
-          --exclude "$SELF_TEST_EXCLUDE"`
-          --junit "$jUnitOutput" `
-          "$($tests -Join '|')" `
-          '2>&1'
+        cmd.exe /C .\meteor.bat self-test --exclude "$SELF_TEST_EXCLUDE" --junit "$jUnitOutput" "$($tests -Join '|')" '2>&1'
 
 after_test:
 # upload test results via rest-api
