@@ -33,7 +33,7 @@ test_script:
   - ps: |
         $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml';
         $tests = 'modules - test app|autoupdate|create$';
-        .\meteor.bat self-test --list --junit $jUnitOutput "$tests";
+        .\meteor.bat self-test --list --junit $jUnitOutput "$tests" 2>&1
 
 after_test:
 # upload test results via rest-api
