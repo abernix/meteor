@@ -15,8 +15,8 @@ environment:
       ^compiler plugins - addAssets\
       "
 platform:
-  - x86
   - x64
+  - x86
 
 # We don't need the actual "build", just the tests.
 build: off
