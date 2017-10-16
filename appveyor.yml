@@ -30,11 +30,10 @@ install:
 test_script:
   # For now, we're only running "modules - test app" as it's known to
   # work on Windows and is one of the more important tests.
-  - cmd: >-
-          .\meteor.bat self-test
-            --list
-            --junit %TEMP%\self-test-junit-0.xml
-            "modules - test app|autoupdate|create$"
+  - ps: |
+        $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml';
+        $tests = 'modules - test app|autoupdate|create$';
+        .\meteor.bat self-test --list --junit $jUnitOutput "$tests";
 
 after_test:
 # upload test results via rest-api
