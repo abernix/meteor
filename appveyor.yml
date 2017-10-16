@@ -8,12 +8,6 @@ environment:
   TOOL_NODE_FLAGS: --expose-gc
   TIMEOUT_SCALE_FACTOR: 4
   METEOR_HEADLESS: true
-  SELF_TEST_EXCLUDE: "\
-      ^old cli tests|\
-      ^minifiers can't register non-js|\
-      ^minifiers: apps can't use|\
-      ^compiler plugins - addAssets\
-      "
 platform:
   - x64
   - x86
@@ -37,7 +31,9 @@ test_script:
           'autoupdate'
           'colons'
         )
-        cmd.exe /C .\meteor.bat self-test --exclude "$SELF_TEST_EXCLUDE" --junit "$jUnitOutput" "$($tests -Join '|')" '2>&1'
+
+        # --exclude seems to break right now, jfyi.
+        cmd.exe /C .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" '2>&1'
 
 after_test:
 # upload test results via rest-api
