@@ -32,6 +32,7 @@ if (Test-Path $devbundle_zip) {
   Write-Host "Skipping download and installing kit from $devbundle_zip"
 } else {
   Write-Host "Going to download the dependency kit from the Internet"
+  Write-Host "devbundle_link: $devbundle_link"
 
   $webclient = New-Object System.Net.WebClient
   $webclient.DownloadFile($devbundle_link, $devbundle_zip)

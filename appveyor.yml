@@ -1,0 +1,27 @@
+version: '{build}'
+clone_folder: C:\projects\meteor
+os: Visual Studio 2015
+platform: x64
+environment:
+  matrix:
+    - METEOR_PRETTY_OUTPUT: 0
+      METEOR_DISABLE_OPTIMISTIC_CACHING: 1
+      SELF_TEST_TOOL_NODE_FLAGS: ' '
+      TOOL_NODE_FLAGS: --expose-gc
+      TIMEOUT_SCALE_FACTOR: 4
+      METEOR_HEADLESS: true
+      SELF_TEST_EXCLUDE: "^old cli tests|^minifiers can't register non-js|^minifiers: apps can't use|^compiler plugins - addAssets"
+
+build: off
+
+install:
+- ps: C:\projects\meteor\scripts\windows\appveyor\install.ps1
+
+test_script:
+- .\meteor.bat self-test "modules - test app"
+
+cache:
+- "%LOCALAPPDATA%\\.meteor"
+
+artifacts:
+  - path: bin\*.zip
