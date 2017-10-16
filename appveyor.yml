@@ -33,7 +33,7 @@ test_script:
   - ps: >
         .\meteor.bat self-test
           "--list"
-          "--junit $(Join-Path $env:TEMP 'self-test-junit-0.xml')
+          "--junit $(Join-Path $env:TEMP 'self-test-junit-0.xml')"
           "modules - test app|autoupdate|create`$"
 
 after_test:
