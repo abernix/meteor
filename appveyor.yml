@@ -32,9 +32,9 @@ test_script:
   # work on Windows and is one of the more important tests.
   - ps: >
         .\meteor.bat self-test
-          --list
-          --junit "$(Join-Path $env:TEMP 'self-test-junit-0.xml')"
-          "modules - test app|autoupdate|create$"
+          "--list"
+          "--junit $(Join-Path $env:TEMP 'self-test-junit-0.xml')
+          "modules - test app|autoupdate|create`$"
 
 after_test:
 # upload test results via rest-api
