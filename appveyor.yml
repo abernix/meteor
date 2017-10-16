@@ -32,10 +32,16 @@ test_script:
   # specifically, the more important oes.
   - ps: |
         $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml';
+        $tests = @(
+          'modules - test app'
+          'autoupdate'
+          'colons'
+        )
+
         cmd.exe /C .\meteor.bat self-test `
           --exclude "$SELF_TEST_EXCLUDE"`
           --junit "$jUnitOutput" `
-          'modules - test app|autoupdate' `
+          "$($tests -Join '|')" `
           '2>&1'
 
 after_test:
