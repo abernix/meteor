@@ -35,7 +35,7 @@ test_script:
         cmd.exe /C .\meteor.bat self-test `
           --exclude "$SELF_TEST_EXCLUDE"`
           --junit "$jUnitOutput" `
-          'modules - test app|autoupdate|create$' `
+          'modules - test app|autoupdate' `
           '2>&1'
 
 after_test:
