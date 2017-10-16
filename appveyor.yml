@@ -18,6 +18,9 @@ platform:
   - x64
   - x86
 
+matrix:
+  fast_finish: true
+
 # We don't need the actual "build", just the tests.
 build: off
 
