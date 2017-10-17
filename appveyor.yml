@@ -9,6 +9,7 @@ environment:
   METEOR_HEADLESS: true
   SELF_TEST_EXCLUDE: "\
       ^old cli tests|\
+      colons|\
       ^minifiers can't register non-js|\
       ^minifiers: apps can't use|\
       ^compiler plugins - addAssets\

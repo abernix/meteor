@@ -1735,7 +1735,7 @@ function getFilteredTests(options) {
         newTags.push('unchanged');
       } else if (options.excludeRegexp &&
                  options.excludeRegexp.test(test.name)) {
-        console.log("Added '%s' to the excluded tests.");
+        console.log("Added '%s' to the excluded tests.", test.name);
         newTags.push('excluded');
       }
 
