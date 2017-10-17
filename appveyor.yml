@@ -50,7 +50,7 @@ test_script:
       Write-Host "exclude: $exclude"
       cmd.exe /C .\meteor.bat self-test --list --junit "$jUnit" "$tests" --exclude "$exclude"
       Write-Host "ErrorCode: $LASTEXITCODE"
-      Exit 0
+      Exit-AppVeyorBuild
       # .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" --exclude "$env:Platform" 2>&1 | Write-Host
 
 after_test:
