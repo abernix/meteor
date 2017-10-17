@@ -25,7 +25,7 @@ install:
 test_script:
   # For now, we're only running tests known to work on Windows, and
   # specifically, the more important oes.
-  - cmd: .\meteor.bat self-test "modules - test app"
+  - .\meteor.bat self-test "modules - test app"
   # - ps: |
   #       $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml';
   #       $tests = @(
