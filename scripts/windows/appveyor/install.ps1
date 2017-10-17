@@ -19,7 +19,7 @@ Write-Host "Updating submodules recursively..." -ForegroundColor Magenta
 Write-Host "Running 'meteor --get-ready'..." -ForegroundColor Magenta
 # By redirecting error to host, we avoid the more shocking error since
 # 'meteor --version' on a checkout returns an "error" status code.
-& "$meteorBat" --get-ready 2>&1 | Write-Host -ForegroundColor Green
+& "$meteorBat" --version 2>&1 | Write-Host -ForegroundColor Green
 
 # This should no longer be necessary with Meteor 1.6, which will
 # automatically install these dependencies when they're not found in the
