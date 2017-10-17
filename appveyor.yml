@@ -40,9 +40,8 @@ after_test:
 # upload test results via rest-api
   - ps: |
         $wc = New-Object 'System.Net.WebClient'
-        Get-ChildItem $env:TEMP -Name -Recurse -Depth 1 'self-test-junit-*.xml'  |
-        Foreach-Object {
-          $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_))
+        Get-ChildItem $env:TEMP 'self-test-junit-*.xml' | Foreach-Object {
+          $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", ($_.FullName))
         }
 
 cache:
