@@ -3,7 +3,6 @@ clone_folder: C:\projects\meteor
 os: Visual Studio 2015
 environment:
   METEOR_PRETTY_OUTPUT: 0
-  METEOR_DISABLE_OPTIMISTIC_CACHING: 1
   SELF_TEST_TOOL_NODE_FLAGS: ' '
   TOOL_NODE_FLAGS: --expose-gc
   TIMEOUT_SCALE_FACTOR: 4
