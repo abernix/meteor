@@ -31,31 +31,7 @@ install:
   - ps: C:\projects\meteor\scripts\windows\appveyor\install.ps1
 
 test_script:
-  # For now, we're only running tests known to work on Windows, and
-  # specifically, the more important ones.
-  #   Notes:
-  #      When using non-powershell, don't use single quotes.
-  - ps: |
-      $jUnit = Join-Path $env:TEMP 'self-test-junit-0.xml'
-      $testList = @(
-        'modules - test app'
-        'autoupdate'
-        'create$'
-        # 'dynamic import'
-        'colons'
-      )
-      $tests = $testList -Join '|'
-      Write-Host "tests: $tests"
-      $exclude = $env:SELF_TEST_EXCLUDE
-      Write-Host "exclude: $exclude"
-      & cmd.exe /C .\meteor.bat self-test --junit "$jUnit" "$tests" --exclude "$exclude" '2>&1'
-      $selfTestExitCode = $LASTEXITCODE
-      Write-Host "Self Test Exit $selfTestExitCode"
-      If ($selfTestExitCode -ne 0) {
-        Exit $selfTestExitCode
-      }
-      # Exit-AppVeyorBuild
-      # .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" --exclude "$env:Platform" 2>&1 | Write-Host
+  - ps: C:\projects\meteor\scripts\windows\appveyor\tests.ps1
 
 after_test:
 # upload test results via rest-api
