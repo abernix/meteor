@@ -35,7 +35,7 @@ test_script:
   #   Notes:
   #      When using non-powershell, don't use single quotes.
   - ps: |
-      $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml'
+      $jUnit = Join-Path $env:TEMP 'self-test-junit-0.xml'
       Get-ChildItem Env:
       $testList = @(
         'modules - test app'
@@ -48,7 +48,7 @@ test_script:
       Write-Host "tests: $tests"
       $exclude = $env:SELF_TEST_EXCLUDE
       Write-Host "exclude: $exclude"
-      cmd.exe /C .\meteor.bat self-test --list --junit "$jgit UnitOut" "$tests" --exclude "$exclude""
+      cmd.exe /C .\meteor.bat self-test --list --junit "$jUnit" "$tests" --exclude "$exclude""
       Write-Host "ErrorCode: $LASTEXITCODE"
       Exit 0
       # .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" --exclude "$env:Platform" 2>&1 | Write-Host
