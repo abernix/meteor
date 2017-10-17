@@ -31,6 +31,7 @@ test_script:
       $tests = @(
         'modules - test app'
         'autoupdate'
+        'create$'
         'colons'
       )
       cmd.exe /C .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" '2>&1'
