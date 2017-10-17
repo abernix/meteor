@@ -36,11 +36,12 @@ test_script:
   #      When using non-powershell, don't use single quotes.
   - ps: |
       $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml';
+      Get-ChildItem Env:
       $tests = @(
         'modules - test app'
-        'autoupdate'
-        'create$'
-        'dynamic import'
+        # 'autoupdate'
+        # 'create$'
+        # 'dynamic import'
         'colons'
       )
       .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" --exclude "$env:Platform" 2>&1 | Write-Host
