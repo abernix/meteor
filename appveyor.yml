@@ -48,7 +48,7 @@ test_script:
       Write-Host "tests: $tests"
       $exclude = $env:SELF_TEST_EXCLUDE
       Write-Host "exclude: $exclude"
-      & cmd.exe /C .\meteor.bat self-test --list --junit "$jUnit" "$tests" --exclude "$exclude" '2>&1'
+      & cmd.exe /C .\meteor.bat self-test --junit "$jUnit" "$tests" --exclude "$exclude" '2>&1'
       Write-Host "ErrorCode: $LASTEXITCODE"
       Exit-AppVeyorBuild
       # .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" --exclude "$env:Platform" 2>&1 | Write-Host
