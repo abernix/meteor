@@ -862,7 +862,7 @@ Profile("meteorNpm.runNpmCommand", function (args, cwd) {
     }
 
     // Make sure we don't honor any user-provided configuration files.
-    // env.npm_config_userconfig = npmUserConfigFile;
+    env.npm_config_userconfig = npmUserConfigFile;
 
     return new Promise(function (resolve) {
       require('child_process').execFile(
