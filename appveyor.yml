@@ -38,8 +38,8 @@ test_script:
       $jUnit = Join-Path $env:TEMP 'self-test-junit-0.xml'
       $testList = @(
         'modules - test app'
-        # 'autoupdate'
-        # 'create$'
+        'autoupdate'
+        'create$'
         # 'dynamic import'
         'colons'
       )
