@@ -14,6 +14,10 @@ Write-Host "jUnit: $jUnit" -ForegroundColor Yellow
 Write-Host "tests: $tests" -ForegroundColor Yellow
 Write-Host "exclude: $env:SELF_TEST_EXCLUDE" -ForegroundColor Yellow
 
+$maybe = ".\meteor.bat self-test --junit `"$jUnit`" `"$tests`" --exclude `"$env:SELF_TEST_EXCLUDE`""
+
+Write-Host "Command: $maybe"
+
 & cmd.exe /C .\meteor.bat self-test --junit "$jUnit" "$tests" --exclude "$env:SELF_TEST_EXCLUDE" '2>&1'
 $selfTestExitCode = $LASTEXITCODE
 
