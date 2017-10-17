@@ -8,7 +8,7 @@ environment:
   TOOL_NODE_FLAGS: --expose-gc
   TIMEOUT_SCALE_FACTOR: 4
   METEOR_HEADLESS: true
-  NPM_CONFIG_LOGLEVEL: silly
+  NPM_CONFIG_LOGLEVEL: verbose
 platform:
   - x64
   - x86
