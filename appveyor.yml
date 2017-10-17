@@ -9,7 +9,6 @@ environment:
   METEOR_HEADLESS: true
   SELF_TEST_EXCLUDE: "\
       ^old cli tests|\
-      colons|\
       ^minifiers can't register non-js|\
       ^minifiers: apps can't use|\
       ^compiler plugins - addAssets\
@@ -49,8 +48,12 @@ test_script:
       $exclude = $env:SELF_TEST_EXCLUDE
       Write-Host "exclude: $exclude"
       & cmd.exe /C .\meteor.bat self-test --junit "$jUnit" "$tests" --exclude "$exclude" '2>&1'
-      Write-Host "ErrorCode: $LASTEXITCODE"
-      Exit-AppVeyorBuild
+      $selfTestExitCode = $LASTEXITCODE
+      Write-Host "Self Test Exit $selfTestExitCode"
+      If ($selfTestExitCode -ne 0) {
+        Exit $selfTestExitCode
+      }
+      # Exit-AppVeyorBuild
       # .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" --exclude "$env:Platform" 2>&1 | Write-Host
 
 after_test:
