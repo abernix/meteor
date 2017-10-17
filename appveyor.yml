@@ -26,14 +26,20 @@ test_script:
   # specifically, the more important ones.
   #   Notes:
   #      When using non-powershell, don't use single quotes.
-  - set
-  - .\meteor.bat self-test "modules - test app" --junit %TEMP%\self-test-junit-0.xml
+  - ps: |
+      $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml';
+      $tests = @(
+        'modules - test app'
+        'autoupdate'
+        'colons'
+      )
+      cmd.exe /C .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" '2>&1'
 
 after_test:
 # upload test results via rest-api
   - ps: |
         $wc = New-Object 'System.Net.WebClient'
-        Get-ChildItem $env:TEMP -Name -Recurse 'self-test-junit-*.xml'  |
+        Get-ChildItem $env:TEMP -Name -Recurse -Depth 1 'self-test-junit-*.xml'  |
         Foreach-Object {
           $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_))
         }
