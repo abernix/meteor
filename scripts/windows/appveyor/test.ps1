@@ -2,12 +2,12 @@
 $jUnit = Join-Path $env:TEMP 'self-test-junit-0.xml'
 
 $tests = @(
-  'modules - test app'
-  '^assets'
+  # 'modules - test app'
+  # '^assets'
   # 'autoupdate' # works, but slow.
   'create$' # F
-  'dynamic import'
-  'colons' # ok
+  # 'dynamic import'
+  # 'colons' # ok
 ) -Join '|'
 
 Write-Host "Running: $tests" -ForegroundColor Yellow

@@ -2140,7 +2140,10 @@ export function runTests(options) {
       }
 
       if (failure instanceof TestFailure) {
+        console.log(failure);
         const frames = parseStackParse(failure).outsideFiber;
+        console.log("Current Tools directory", files.getCurrentToolsDir());
+        console.log("Frames 0 file", frames[0].file);
         const relpath = files.pathRelative(files.getCurrentToolsDir(),
                                          frames[0].file);
         Console.rawError("  => " + failure.reason + " at " +
