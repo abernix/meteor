@@ -15,7 +15,7 @@ Write-Host "Running 'meteor --get-ready'..." -ForegroundColor Magenta
 # By redirecting error to host, we avoid a shocking/false error color,
 # since --get-ready and --version can print to STDERR and trick
 # PowerShell into thinking something is terribly wrong.
-& "$meteorBat" --get-ready 2>&1 | Write-Host -ForegroundColor Green
+& "$meteorBat" --version 2>&1 | Write-Host -ForegroundColor Green
 
 # This should no longer be necessary with Meteor 1.6, which will
 # automatically install these dependencies when they're not found in the

@@ -3,16 +3,25 @@ clone_folder: C:\projects\meteor
 os: Visual Studio 2015
 environment:
   METEOR_PRETTY_OUTPUT: 0
-  SELF_TEST_TOOL_NODE_FLAGS: ' '
+  SELF_TEST_TOOL_NODE_FLAGS: " "
   TOOL_NODE_FLAGS: --expose-gc
-  TIMEOUT_SCALE_FACTOR: 4
+  TIMEOUT_SCALE_FACTOR: 8
   METEOR_HEADLESS: true
+  SELF_TEST_EXCLUDE: "\
+      ^old cli tests|\
+      ^minifiers can't register non-js|\
+      ^minifiers: apps can't use|\
+      ^compiler plugins - addAssets\
+      "
 platform:
   - x64
   - x86
 
 matrix:
   fast_finish: true
+  allow_failures:
+    - platform: x64
+    - platform: x86
 
 # We don't need the actual "build", just the tests.
 build: off
@@ -34,7 +43,7 @@ test_script:
         'dynamic import'
         'colons'
       )
-      .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" 2>&1 | Write-Host
+      .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" --exclude "$env:Platform" 2>&1 | Write-Host
 
 after_test:
 # upload test results via rest-api
