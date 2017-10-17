@@ -10,14 +10,17 @@ $tests = @(
   'colons'
 ) -Join '|'
 
-Write-Host "jUnit: $jUnit" -ForegroundColor Yellow
-Write-Host "tests: $tests" -ForegroundColor Yellow
-Write-Host "exclude: $env:SELF_TEST_EXCLUDE" -ForegroundColor Yellow
+Write-Host "Running: $tests" -ForegroundColor Yellow
+Write-Host "Excluded: $env:SELF_TEST_EXCLUDE" -ForegroundColor Yellow
 
-& cmd.exe /C .\meteor.bat self-test --junit "$jUnit" "$tests" --exclude "$env:SELF_TEST_EXCLUDE" '2>&1'
+.\meteor.bat self-test --junit "$jUnit" "$tests" --exclude "$env:SELF_TEST_EXCLUDE" '2>&1'
 $selfTestExitCode = $LASTEXITCODE
 
-Write-Host "Self Test Exit $selfTestExitCode" -ForegroundColor Green
+If ($selfTestExitCode -eq 0) {
+  Write-Host "Success!" -ForegroundColor Green
+} else {
+  Write-Host "FAILURE! (Exit: $selfTestExitCode)" -ForegroundColor Red
+}
 
 Write-Host "Uploading JUnit test results..." -ForegroundColor Magenta
 $wc = New-Object 'System.Net.WebClient'
