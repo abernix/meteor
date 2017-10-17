@@ -2178,6 +2178,7 @@ main.registerCommand({
     slow: { type: Boolean },
     galaxy: { type: Boolean },
     browserstack: { type: Boolean },
+    retries: { type: Number },
     // Indicates whether these self-tests are running headless, e.g. in a
     // continuous integration testing environment, where visual niceties
     // like progress bars and spinners are unimportant.
@@ -2279,6 +2280,7 @@ main.registerCommand({
     // filtering options
     onlyChanged: options.changed,
     offline: offline,
+    retries: options.retries,
     includeSlowTests: options.slow,
     galaxyOnly: options.galaxy,
     testRegexp: testRegexp,

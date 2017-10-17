@@ -2102,7 +2102,7 @@ export function runTests(options) {
   testList.filteredTests.forEach((test) => {
     totalRun++;
     Console.error(test.file + ": " + test.name + " ... ");
-    runTest(test);
+    runTest(test, options.retries);
   });
 
   testList.endTime = new Date;
