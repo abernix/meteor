@@ -8,7 +8,6 @@ environment:
   TOOL_NODE_FLAGS: --expose-gc
   TIMEOUT_SCALE_FACTOR: 4
   METEOR_HEADLESS: true
-  NPM_CONFIG_LOGLEVEL: verbose
 platform:
   - x64
   - x86
@@ -25,17 +24,16 @@ install:
 test_script:
   # For now, we're only running tests known to work on Windows, and
   # specifically, the more important oes.
-  - .\meteor.bat self-test "modules - test app"
-  # - ps: |
-  #       $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml';
-  #       $tests = @(
-  #         'modules - test app'
-  #         'autoupdate'
-  #         'colons'
-  #       )
+  - ps: |
+        $jUnitOutput = Join-Path $env:TEMP 'self-test-junit-0.xml';
+        $tests = @(
+          'modules - test app'
+          'autoupdate'
+          'colons'
+        )
 
-  #       # --exclude seems to break right now, jfyi.
-  #       cmd.exe /C .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" '2>&1'
+        # --exclude seems to break right now, jfyi.
+        cmd.exe /C .\meteor.bat self-test --junit "$jUnitOutput" "$($tests -Join '|')" '2>&1'
 
 after_test:
 # upload test results via rest-api
