@@ -11,7 +11,8 @@ environment:
       ^old cli tests|\
       ^minifiers can't register non-js|\
       ^minifiers: apps can't use|\
-      ^compiler plugins - addAssets\
+      ^compiler plugins - addAssets|\
+      ^create$|\
       "
 platform:
   - x64
