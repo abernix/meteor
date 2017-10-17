@@ -23,8 +23,10 @@ install:
 
 test_script:
   # For now, we're only running tests known to work on Windows, and
-  # specifically, the more important oes.
-  - .\meteor.bat self-test 'modules - test app' --junit %TEMP%\self-test-junit-0.xml
+  # specifically, the more important ones.
+  #   Notes:
+  #      When using non-powershell, don't use single quotes.
+  - .\meteor.bat self-test "modules - test app" --junit %TEMP%\self-test-junit-0.xml
 
 after_test:
 # upload test results via rest-api
