@@ -4,7 +4,7 @@ $jUnit = Join-Path $env:TEMP 'self-test-junit-0.xml'
 $tests = @(
   'modules - test app'
   '^assets'
-  'autoupdate'
+  # 'autoupdate' # works, but slow.
   'create$' # F
   'dynamic import'
   'colons' # ok
