@@ -32,6 +32,7 @@ test_script:
         'modules - test app'
         'autoupdate'
         'create$'
+        'dynamic-import'
         'colons'
       )
       cmd.exe /C .\meteor.bat self-test --junit "$jUnitOutput" '2>&1'
