@@ -2,6 +2,7 @@
 $jUnit = Join-Path $env:TEMP 'self-test-junit-0.xml'
 
 $tests = @(
+  '^[h-z0-9]'
 ) -Join '|'
 
 Write-Host "Running: $tests" -ForegroundColor Yellow
