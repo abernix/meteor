@@ -2,13 +2,13 @@
 $jUnit = Join-Path $env:TEMP 'self-test-junit-0.xml'
 
 $tests = @(
-  '^[h-z0-9]'
+  '^^^^[h-z0-9]'
 ) -Join '|'
 
 Write-Host "Running: $tests" -ForegroundColor Yellow
 Write-Host "Excluded: $env:SELF_TEST_EXCLUDE" -ForegroundColor Yellow
 
-.\meteor.bat self-test --junit "$jUnit" "$tests" --exclude "$env:SELF_TEST_EXCLUDE" '2>&1'
+.\meteor.bat self-test --junit "$jUnit" --file "$tests" --exclude "$env:SELF_TEST_EXCLUDE" '2>&1'
 $selfTestExitCode = $LASTEXITCODE
 
 If ($selfTestExitCode -eq 0) {
