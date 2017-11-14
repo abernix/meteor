@@ -14,7 +14,8 @@ if (Meteor.isClient) {
   function linkHref (prev) {
     var links = document.getElementsByTagName('link');
     if (links.length === 2) {
-      return JSON.stringify(_.pluck(links, 'href'));
+      const hrefs = links.map(value => value.href);
+      return JSON.stringify(hrefs);
     } else if (links.length > 0 && links.length > 2) {
       // this is the period of time when we have both new and old
       // stylesheets, just count this as "nothing changed"
