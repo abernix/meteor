@@ -5,6 +5,8 @@ import moment from "moment";
 import shared from "./imports/shared";
 import { Meteor as ImportedMeteor } from "meteor/meteor";
 
+const hasOwn = Object.prototype.hasOwnProperty;
+
 describe("app modules", () => {
   it("can be imported using absolute identifiers", () => {
     assert.strictEqual(require("/tests"), exports);
@@ -124,9 +126,9 @@ describe("template modules", () => {
   Meteor.isClient &&
   it("should be importable on the client", () => {
     assert.strictEqual(typeof Template, "function");
-    assert.ok(! _.has(Template, "lazy"));
+    assert.ok(! hasOwn.call(Template, "lazy"));
     require("./imports/lazy.html");
-    assert.ok(_.has(Template, "lazy"));
+    assert.ok(hasOwn.call(Template, "lazy"));
     assert.ok(Template.lazy instanceof Template);
   });
 
