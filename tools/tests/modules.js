@@ -21,11 +21,15 @@ selftest.define("modules - test app", function () {
   // Make sure we use the right "env" section of .babelrc.
   s.set("NODE_ENV", "development");
 
+  // The meteortesting:mocha driver supports various drivers
+  // through use of this environment variable.
+  s.set("TEST_BROWSER_DRIVER", "phantomjs");
+
   s.createApp("modules-test-app", "modules");
   s.cd("modules-test-app", function () {
     const run = s.run(
       "test", "--once", "--full-app",
-      "--driver-package", "dispatch:mocha-phantomjs"
+      "--driver-package", "meteortesting:mocha"
     );
 
     run.waitSecs(60);
