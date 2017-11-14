@@ -114,7 +114,7 @@ jobs:
           name: Git Submodules.
           command: (git submodule sync && git submodule update --init --recursive) || (rm -fr .git/config .git/modules && git submodule deinit -f . && git submodule update --init --recursive)
       - restore_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
       - run:
           name: Get Ready
           command: |
@@ -147,7 +147,7 @@ jobs:
       - attach_workspace:
           at: .
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
 
   Group 0:
@@ -175,7 +175,7 @@ jobs:
       - run:
           <<: *run_save_node_bin
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
       - store_test_results:
           path: /tmp/results
@@ -212,7 +212,7 @@ jobs:
       - run:
           <<: *run_save_node_bin
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
       - store_test_results:
           path: /tmp/results
@@ -249,7 +249,7 @@ jobs:
       - run:
           <<: *run_save_node_bin
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
       - store_test_results:
           path: /tmp/results
@@ -286,7 +286,7 @@ jobs:
       - run:
           <<: *run_save_node_bin
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
       - store_test_results:
           path: /tmp/results
@@ -323,7 +323,7 @@ jobs:
       - run:
           <<: *run_save_node_bin
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
       - store_test_results:
           path: /tmp/results
@@ -360,7 +360,7 @@ jobs:
       - run:
           <<: *run_save_node_bin
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
       - store_test_results:
           path: /tmp/results
@@ -397,7 +397,7 @@ jobs:
       - run:
           <<: *run_save_node_bin
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
       - store_test_results:
           path: /tmp/results
@@ -434,7 +434,7 @@ jobs:
       - run:
           <<: *run_save_node_bin
       - save_cache:
-          key: meteor-cache
+          key: meteor-cache-v0001
           <<: *meteor_cache_dirs
       - store_test_results:
           path: /tmp/results
