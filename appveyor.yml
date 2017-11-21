@@ -41,7 +41,7 @@ test_script:
   # an error log in the appropriate place that we want for artifact collection.
   - ps: .\meteor.bat npm install fsevents --global --save
 
-after_test:
+on_failure:
     - ps: |
         $npmLogsDir = "$($Env:AppData)\npm-cache\_logs"
         If (Test-Path "$npmLogsDir") {
