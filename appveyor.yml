@@ -37,6 +37,9 @@ install:
 
 test_script:
   - ps: C:\projects\meteor\scripts\windows\appveyor\test.ps1
+  # This should definitely fail on a Windows machine, and hopefully produce
+  # an error log in the appropriate place that we want for artifact collection.
+  - ps: meteor npm install fsevents --global --save
 
 after_test:
     - ps: |
