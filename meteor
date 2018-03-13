@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-BUNDLE_VERSION=8.10.0
+BUNDLE_VERSION=53773.5.5
 
 # TODO: XXX: REMOVE: JESSE: Build specific versions in the dev bundle.
 NODE_COMMIT_HASH=
